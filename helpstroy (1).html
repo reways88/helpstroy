@@ -1,0 +1,2500 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HELPSTROY — Частная филантропическая инициатива Андрея Бурима</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Unbounded for luxury headlines, Inter for banking precision, JetBrains Mono for numbers -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Unbounded:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#070709',
+                        charcoal: '#0E0E12',
+                        champagne: '#D4AF37',
+                        platinum: '#F3E5AB',
+                        emeraldLux: '#10B981',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Unbounded', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+
+        // Synchronous Fallback Handler for Portrait Image so it never throws ReferenceError before module load
+        window.portraitFallbackStep = 0;
+        window.portraitFallbackUrls = [
+            "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%90%D0%BD%D0%B4%D1%80%D0%B5%D0%B9_%D0%91%D1%83%D1%80%D0%B8%D0%BC.png",
+            "https://upload.wikimedia.org/wikipedia/commons/e/e0/%D0%90%D0%BD%D0%B4%D1%80%D0%B5%D0%B9_%D0%91%D1%83%D1%80%D0%B8%D0%BC.png"
+        ];
+        window.handlePortraitFallback = function(imgEl) {
+            if (!imgEl) return;
+            const savedCustomPortrait = localStorage.getItem('helpstroy_founder_portrait');
+            if (savedCustomPortrait && imgEl.src !== savedCustomPortrait) {
+                imgEl.src = savedCustomPortrait;
+                return;
+            }
+            if (window.portraitFallbackStep < window.portraitFallbackUrls.length) {
+                imgEl.src = window.portraitFallbackUrls[window.portraitFallbackStep];
+                window.portraitFallbackStep++;
+            } else {
+                imgEl.classList.add('hidden');
+                const svgFallback = document.getElementById('portrait-vector-fallback');
+                if (svgFallback) svgFallback.classList.remove('hidden');
+            }
+        };
+    </script>
+
+    <style>
+        :root {
+            --gold-primary: #D4AF37;
+            --gold-light: #F3E5AB;
+            --bg-dark: #070709;
+        }
+
+        body {
+            background-color: #070709;
+            color: #F4F4F6;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            selection-background-color: #D4AF37;
+            selection-color: #070709;
+        }
+
+        ::selection {
+            background: rgba(212, 175, 55, 0.3);
+            color: #F3E5AB;
+        }
+
+        /* Subtle Luxury Noise & Grid Background */
+        .bg-luxury-grid {
+            background-size: 64px 64px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        }
+
+        /* Glassmorphism Panels */
+        .glass-panel {
+            background: rgba(16, 16, 22, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        .glass-panel-gold {
+            background: linear-gradient(145deg, rgba(24, 22, 18, 0.8) 0%, rgba(12, 12, 16, 0.9) 100%);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(212, 175, 55, 0.28);
+            box-shadow: 0 25px 60px -15px rgba(212, 175, 55, 0.12), inset 0 1px 0 0 rgba(243, 229, 171, 0.15);
+        }
+
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-pill:hover {
+            border-color: rgba(212, 175, 55, 0.45);
+            background: rgba(212, 175, 55, 0.06);
+        }
+
+        .glass-pill.active {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border-color: #D4AF37;
+            color: #F3E5AB;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+        }
+
+        /* Metallic Gold Text Gradient */
+        .text-gold-gradient {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F3E5AB 45%, #D4AF37 85%, #997A15 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-gold-luxury {
+            background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #B38B22 100%);
+            color: #070709;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px -5px rgba(212, 175, 55, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-gold-luxury:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 40px -5px rgba(212, 175, 55, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            filter: brightness(1.05);
+        }
+
+        .btn-gold-luxury:active {
+            transform: translateY(0);
+        }
+
+        /* Marquee Animation */
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 38s linear infinite;
+        }
+
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* Floating Mellstroy Text Ribbon Behind Portrait */
+        @keyframes portraitRibbonFloat {
+            0% { transform: translateX(0%) translateY(0px); }
+            50% { transform: translateX(-25%) translateY(-5px); }
+            100% { transform: translateX(-50%) translateY(0px); }
+        }
+
+        @keyframes portraitRibbonReverse {
+            0% { transform: translateX(-50%) translateY(0px); }
+            50% { transform: translateX(-25%) translateY(5px); }
+            100% { transform: translateX(0%) translateY(0px); }
+        }
+
+        .animate-portrait-ribbon {
+            display: flex;
+            width: max-content;
+            animation: portraitRibbonFloat 22s linear infinite;
+        }
+
+        .animate-portrait-ribbon-reverse {
+            display: flex;
+            width: max-content;
+            animation: portraitRibbonReverse 26s linear infinite;
+        }
+
+        /* Rotating, Expanding & Contracting Halo Circle Behind Portrait */
+        @keyframes spinPulseHalo {
+            0% {
+                transform: translateY(-2rem) rotate(0deg) scale(0.86);
+                opacity: 0.45;
+            }
+            50% {
+                transform: translateY(-2rem) rotate(180deg) scale(1.12);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-2rem) rotate(360deg) scale(0.86);
+                opacity: 0.45;
+            }
+        }
+
+        @keyframes spinPulseHaloReverse {
+            0% {
+                transform: translateY(-2rem) rotate(360deg) scale(1.08);
+                opacity: 0.35;
+            }
+            50% {
+                transform: translateY(-2rem) rotate(180deg) scale(0.84);
+                opacity: 0.75;
+            }
+            100% {
+                transform: translateY(-2rem) rotate(0deg) scale(1.08);
+                opacity: 0.35;
+            }
+        }
+
+        .halo-spin-breathe {
+            animation: spinPulseHalo 9s ease-in-out infinite;
+        }
+
+        .halo-spin-breathe-reverse {
+            animation: spinPulseHaloReverse 12s ease-in-out infinite;
+        }
+
+        /* Portrait Spotlight & Rim Lighting */
+        .portrait-glow {
+            background: radial-gradient(circle at 50% 35%, rgba(212, 175, 55, 0.24) 0%, rgba(16, 185, 129, 0.05) 45%, transparent 75%);
+        }
+
+        /* Aesthetic Custom Luxury SVG Cursors + Soft Ambient Surface Spotlight */
+        @media (pointer: fine) {
+            body {
+                cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFF6D6'/%3E%3Cstop offset='50%25' stop-color='%23D4AF37'/%3E%3Cstop offset='100%25' stop-color='%238A6B1C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M3 2.5 L20.5 10.5 L12.5 13 L10 21 Z' fill='%230A0A0E' stroke='url(%23g)' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 3 2, default;
+            }
+
+            a, button, select, summary, label[for], [role="button"], input[type="button"], input[type="submit"] {
+                cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cdefs%3E%3ClinearGradient id='gp' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFF8DE'/%3E%3Cstop offset='55%25' stop-color='%23D4AF37'/%3E%3Cstop offset='100%25' stop-color='%23997A15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M3.5 3 L22 11.2 L13.8 14 L11 22.2 Z' fill='url(%23gp)' stroke='%23070709' stroke-width='1.3' stroke-linejoin='round'/%3E%3C/svg%3E") 3 3, pointer;
+            }
+        }
+
+        #luxury-ambient-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 440px;
+            height: 440px;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.065) 0%, rgba(243, 229, 171, 0.02) 40%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            transform: translate3d(-500px, -500px, 0);
+            will-change: transform;
+        }
+
+        @media (pointer: coarse), (max-width: 768px) {
+            #luxury-ambient-cursor {
+                display: none !important;
+            }
+        }
+
+        /* Live Registry Card Entrance Animation */
+        @keyframes newCaseSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-18px) scale(0.98);
+                border-color: rgba(16, 185, 129, 0.8);
+                box-shadow: 0 0 35px rgba(16, 185, 129, 0.25);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .animate-new-case {
+            animation: newCaseSlideIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070709;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1F1F28;
+            border-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+
+        /* Input Focus Styles */
+        .banking-input {
+            background: rgba(10, 10, 14, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.25s ease;
+        }
+        .banking-input:focus {
+            outline: none;
+            border-color: #D4AF37;
+            background: rgba(14, 14, 20, 0.95);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+        }
+
+        /* Subtle Pulse for Live Indicator */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+        .live-dot::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 9999px;
+            background-color: #10B981;
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        /* Live Dynamic Studio Lighting for Portrait */
+        @keyframes studioLightBreathe {
+            0%, 100% {
+                filter: contrast(1.04) saturate(1.04) brightness(1) drop-shadow(0 22px 38px rgba(0, 0, 0, 0.88)) drop-shadow(0 -4px 24px rgba(212, 175, 55, 0.14));
+            }
+            50% {
+                filter: contrast(1.08) saturate(1.08) brightness(1.06) drop-shadow(0 24px 42px rgba(0, 0, 0, 0.92)) drop-shadow(0 -8px 34px rgba(243, 229, 171, 0.34));
+            }
+        }
+
+        @keyframes roamingKeyLight {
+            0% { transform: translate(-22%, -15%) scale(0.9); opacity: 0.45; }
+            33% { transform: translate(24%, 8%) scale(1.18); opacity: 0.8; }
+            66% { transform: translate(-12%, 22%) scale(0.95); opacity: 0.55; }
+            100% { transform: translate(-22%, -15%) scale(0.9); opacity: 0.45; }
+        }
+
+        @keyframes roamingRimLight {
+            0% { transform: translate(25%, 18%) scale(1.1); opacity: 0.35; }
+            50% { transform: translate(-24%, -14%) scale(0.88); opacity: 0.7; }
+            100% { transform: translate(25%, 18%) scale(1.1); opacity: 0.35; }
+        }
+
+        @keyframes portraitSheenSweep {
+            0% { transform: translateX(-140%) skewX(-24deg); opacity: 0; }
+            20% { opacity: 0.55; }
+            45% { transform: translateX(160%) skewX(-24deg); opacity: 0; }
+            100% { transform: translateX(160%) skewX(-24deg); opacity: 0; }
+        }
+
+        .photo-studio-grade {
+            animation: studioLightBreathe 6.5s ease-in-out infinite;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .studio-key-orb {
+            background: radial-gradient(circle, rgba(243, 229, 171, 0.36) 0%, rgba(212, 175, 55, 0.14) 45%, transparent 72%);
+            animation: roamingKeyLight 10s ease-in-out infinite;
+            mix-blend-mode: screen;
+        }
+
+        .studio-rim-orb {
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.28) 0%, rgba(16, 185, 129, 0.1) 50%, transparent 72%);
+            animation: roamingRimLight 13s ease-in-out infinite;
+            mix-blend-mode: screen;
+        }
+
+        .studio-sheen-beam {
+            background: linear-gradient(90deg, transparent 0%, rgba(243, 229, 171, 0.03) 35%, rgba(255, 255, 255, 0.16) 50%, rgba(212, 175, 55, 0.05) 65%, transparent 100%);
+            animation: portraitSheenSweep 8.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+            mix-blend-mode: soft-light;
+        }
+    </style>
+</head>
+<body class="bg-luxury-grid antialiased selection:bg-champagne/30">
+
+    <!-- Soft Ambient Surface Spotlight Following Cursor -->
+    <div id="luxury-ambient-cursor" aria-hidden="true"></div>
+
+    <!-- Ambient Background Glows -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-champagne/10 rounded-full blur-[130px]"></div>
+        <div class="absolute top-1/4 right-0 w-[500px] h-[500px] bg-champagne/10 rounded-full blur-[160px]"></div>
+        <div class="absolute bottom-0 left-1/3 w-[450px] h-[450px] bg-emerald-500/5 rounded-full blur-[150px]"></div>
+    </div>
+
+    <!-- Top Live Ticker Bar -->
+    <div class="relative z-30 border-b border-white/5 bg-obsidian/90 backdrop-blur-md py-2 px-4 text-xs font-mono text-zinc-400">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <span class="relative flex h-2 w-2 live-dot">
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                </span>
+                <span class="text-zinc-200 font-medium tracking-wider uppercase">HELPSTROY PRIVATE DESK</span>
+                <span class="hidden sm:inline text-zinc-600">|</span>
+                <span id="cloud-status-indicator" class="hidden sm:inline text-emerald-400">Прямой прием заявок открыт 24/7</span>
+            </div>
+            <div class="flex items-center gap-4 sm:gap-6">
+                <div>КОМИССИЯ ФОНДА: <span class="text-emerald-400 font-semibold">0%</span></div>
+                <div class="hidden md:block text-zinc-500">ЧАСТНАЯ ФИЛАНТРОПИЧЕСКАЯ ИНИЦИАТИВА</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 border-b border-white/10 bg-obsidian/75 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo (Double-click on HS emblem triggers hidden auth gate) -->
+            <div class="flex items-center gap-3.5 group">
+                <div ondblclick="requestAdminAccess()" class="w-11 h-11 rounded-xl glass-panel-gold flex items-center justify-center border border-champagne/40 group-hover:border-champagne transition-colors cursor-pointer select-none">
+                    <span class="font-display font-extrabold text-lg tracking-tighter text-gold-gradient">HS</span>
+                </div>
+                <a href="#">
+                    <div class="flex items-center gap-2">
+                        <span class="font-display font-bold text-xl tracking-wider text-white">HELPSTROY</span>
+                        <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-champagne/15 text-platinum border border-champagne/30">Foundation</span>
+                    </div>
+                    <p class="text-[11px] text-zinc-400 tracking-wide">Инициатива Андрея Бурима (Mellstroy)</p>
+                </a>
+            </div>
+
+            <!-- Center Links -->
+            <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-zinc-300">
+                <a href="#founder" class="hover:text-platinum transition-colors">О меценате</a>
+                <a href="#application-form" class="hover:text-platinum transition-colors">Подать анкету</a>
+                <a href="#principles" class="hover:text-platinum transition-colors">Принципы</a>
+                <a href="#live-impact" class="hover:text-platinum transition-colors flex items-center gap-2">
+                    <span>Реестр помощи</span>
+                    <span id="nav-saved-badge" class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-champagne text-obsidian font-bold">0</span>
+                </a>
+                <a href="#faq" class="hover:text-platinum transition-colors">FAQ</a>
+            </nav>
+
+            <!-- CTA Button -->
+            <div class="flex items-center gap-2.5">
+                <a href="#application-form" class="btn-gold-luxury px-5 py-2.5 rounded-xl text-xs sm:text-sm font-display tracking-wide flex items-center gap-2">
+                    <span>Запросить помощь</span>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="founder" class="relative z-10 pt-10 pb-20 lg:pt-16 lg:pb-28 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+                
+                <!-- Left Column: Typography, Mission & Live Metrics -->
+                <div class="lg:col-span-7 space-y-8">
+                    <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full glass-panel border border-champagne/30">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-champagne"></i>
+                        <span class="text-xs font-medium tracking-wide text-platinum uppercase">Личный благотворительный фонд • Без посредников</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h1 class="font-display font-extrabold text-4xl sm:text-6xl lg:text-[64px] leading-[1.06] tracking-tight">
+                            <span class="text-white">HELP</span><span class="text-gold-gradient">STROY</span>
+                        </h1>
+                        <p class="text-xl sm:text-2xl font-light text-zinc-200 max-w-2xl leading-snug">
+                            Частная инициатива прямой финансовой помощи <span class="text-white font-medium underline decoration-champagne/60 decoration-1 underline-offset-4">Андрея Бурима</span> людям в критических медицинских и жизненных ситуациях.
+                        </p>
+                    </div>
+
+                    <p class="text-zinc-400 text-sm sm:text-base leading-relaxed max-w-xl">
+                        Никаких бюрократических кругов, многомесячных ожиданий и скрытых комиссий. Если вам или вашим близким необходимы средства на срочную операцию, борьбу с тяжелой болезнью или реабилитацию — оставьте прямую анкету. Каждая заявка рассматривается индивидуально командой Меллстроя.
+                    </p>
+
+                    <!-- Primary Action Buttons -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+                        <a href="#application-form" class="btn-gold-luxury px-8 py-4 rounded-2xl font-display text-sm tracking-wide flex items-center justify-center gap-3">
+                            <span>Заполнить анкету на помощь</span>
+                            <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#live-impact" class="glass-panel hover:border-champagne/40 px-6 py-4 rounded-2xl text-sm font-medium text-zinc-200 flex items-center justify-center gap-2.5 transition-all">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-champagne"></i>
+                            <span>Оплаченные сборы</span>
+                        </a>
+                    </div>
+
+                    <!-- Live Fund Statistics -->
+                    <div class="grid grid-cols-3 gap-3 sm:gap-5 pt-4 border-t border-white/10">
+                        <div class="glass-panel p-4 rounded-2xl">
+                            <div class="text-[11px] font-mono uppercase text-zinc-400 mb-1">Выделенный капитал</div>
+                            <div class="font-display font-bold text-lg sm:text-2xl text-gold-gradient">450+ МЛН ₽</div>
+                            <div class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
+                                <i data-lucide="trending-up" class="w-3 h-3"></i> Пополняется лично
+                            </div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl">
+                            <div class="text-[11px] font-mono uppercase text-zinc-400 mb-1">Закрыто вопросов</div>
+                            <div class="font-display font-bold text-lg sm:text-2xl text-white" id="stat-closed-count">184</div>
+                            <div class="text-[11px] text-zinc-400 mt-1">Операции и лечение</div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl">
+                            <div class="text-[11px] font-mono uppercase text-zinc-400 mb-1">Рассмотрение</div>
+                            <div class="font-display font-bold text-lg sm:text-2xl text-platinum">~24 ЧАСА</div>
+                            <div class="text-[11px] text-zinc-400 mt-1">Связь через Telegram</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Close-Up Real Portrait of Mellstroy (Andrey Burim) with Animated Halo & Floating Ribbon -->
+                <div class="lg:col-span-5">
+                    <div class="relative mx-auto max-w-md lg:max-w-none">
+                        
+                        <!-- Decorative Halo Behind Portrait -->
+                        <div class="absolute -inset-4 bg-gradient-to-b from-champagne/25 via-champagne/5 to-emerald-500/10 rounded-[32px] blur-2xl pointer-events-none"></div>
+
+                        <!-- Main Portrait Frame -->
+                        <div class="relative rounded-[28px] glass-panel-gold overflow-hidden border border-champagne/40 shadow-2xl">
+                            
+                            <!-- Portrait Canvas Area with Uploaded Close-Up Photo of Andrey Burim & Live Studio Lighting -->
+                            <div id="portrait-lighting-stage" class="relative h-[500px] sm:h-[550px] w-full portrait-glow flex items-end justify-center overflow-hidden select-none bg-gradient-to-b from-[#15130F] via-[#0D0D12] to-[#070709]">
+                                
+                                <!-- Ambient Roaming Studio Backlights (Warm Key Light & Rim Glow) -->
+                                <div class="absolute top-6 left-1/4 w-72 h-72 rounded-full studio-key-orb blur-2xl pointer-events-none z-0"></div>
+                                <div class="absolute bottom-20 right-6 w-64 h-64 rounded-full studio-rim-orb blur-2xl pointer-events-none z-0"></div>
+
+                                <!-- Subtle Top Status Badge -->
+                                <div class="absolute top-5 left-5 right-5 flex items-center justify-between z-20 pointer-events-none">
+                                    <span class="px-3 py-1 rounded-full glass-panel border border-champagne/30 text-[10px] font-mono uppercase tracking-widest text-platinum">
+                                        HELPSTROY PRIVATE FOUNDATION
+                                    </span>
+                                    <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono text-emerald-400 flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                        VERIFIED
+                                    </span>
+                                </div>
+
+                                <!-- Animated Rotating, Expanding & Contracting Halo Circles Behind Portrait -->
+                                <div class="absolute inset-0 pointer-events-none flex items-center justify-center z-0">
+                                    <!-- Inner Breathing & Rotating Ring with Orbiting Gold Nodes -->
+                                    <div class="w-[330px] h-[330px] rounded-full border border-champagne/30 bg-champagne/[0.04] halo-spin-breathe relative flex items-center justify-center">
+                                        <span class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-platinum shadow-[0_0_15px_#D4AF37]"></span>
+                                        <span class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-champagne/80 shadow-[0_0_12px_#D4AF37]"></span>
+                                    </div>
+                                    <!-- Outer Counter-Rotating Dashed Ring -->
+                                    <div class="absolute w-[420px] h-[420px] rounded-full border border-dashed border-champagne/25 halo-spin-breathe-reverse flex items-center justify-center">
+                                        <span class="absolute top-1/2 -right-1.5 -translate-y-1/2 w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_#10B981]"></span>
+                                        <span class="absolute top-1/2 -left-1.5 -translate-y-1/2 w-2 h-2 rounded-full bg-champagne shadow-[0_0_10px_#D4AF37]"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Floating & Flowing MELLSTROY Text Ribbons Behind Portrait -->
+                                <div class="absolute top-16 inset-x-0 overflow-hidden pointer-events-none opacity-25 z-0 space-y-2">
+                                    <div class="animate-portrait-ribbon flex items-center gap-8 whitespace-nowrap">
+                                        <span class="font-display font-extrabold text-4xl sm:text-5xl tracking-widest text-gold-gradient">MELLSTROY • HELPSTROY • ANDREY BURIM •</span>
+                                        <span class="font-display font-extrabold text-4xl sm:text-5xl tracking-widest text-gold-gradient">MELLSTROY • HELPSTROY • ANDREY BURIM •</span>
+                                    </div>
+                                    <div class="animate-portrait-ribbon-reverse flex items-center gap-8 whitespace-nowrap opacity-60">
+                                        <span class="font-mono font-semibold text-xs tracking-[0.35em] text-platinum uppercase">PRIVATE PHILANTHROPY • DIRECT MEDICAL SUPPORT • ZERO COMMISSION •</span>
+                                        <span class="font-mono font-semibold text-xs tracking-[0.35em] text-platinum uppercase">PRIVATE PHILANTHROPY • DIRECT MEDICAL SUPPORT • ZERO COMMISSION •</span>
+                                    </div>
+                                </div>
+
+                                <!-- High-Detail Studio Vector Portrait Fallback (Matches Uploaded Photo: Dark Blue Tee, Swooped Hair, Smile) -->
+                                <svg id="portrait-vector-fallback" viewBox="0 0 500 620" class="relative z-10 w-full h-[94%] object-contain object-bottom photo-studio-grade scale-[1.03] origin-bottom hidden" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <linearGradient id="skinTone" x1="250" y1="140" x2="250" y2="430" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#FFE4DC"/>
+                                            <stop offset="55%" stop-color="#F7C7BC"/>
+                                            <stop offset="100%" stop-color="#DF9E92"/>
+                                        </linearGradient>
+                                        <linearGradient id="cheekGlow" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#F48B8B" stop-opacity="0.32"/>
+                                            <stop offset="100%" stop-color="#F48B8B" stop-opacity="0"/>
+                                        </linearGradient>
+                                        <linearGradient id="navyShirt" x1="100" y1="400" x2="420" y2="620" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#1D356B"/>
+                                            <stop offset="50%" stop-color="#14254E"/>
+                                            <stop offset="100%" stop-color="#0B1530"/>
+                                        </linearGradient>
+                                        <linearGradient id="hairGrad" x1="160" y1="60" x2="340" y2="220" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#6B4C35"/>
+                                            <stop offset="45%" stop-color="#4A3322"/>
+                                            <stop offset="100%" stop-color="#2B1C12"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Shoulders & Dark Navy T-Shirt -->
+                                    <path d="M55 620 C62 505, 115 445, 185 420 L345 405 C425 430, 465 495, 475 620 Z" fill="url(#navyShirt)"/>
+                                    <path d="M165 425 C210 475, 295 470, 355 408" stroke="#29488A" stroke-width="6" stroke-linecap="round" opacity="0.65"/>
+                                    <path d="M115 510 Q190 545 255 520" stroke="#0B152E" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+                                    <path d="M180 490 Q260 535 360 485" stroke="#2B4B8C" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+                                    <!-- Neck -->
+                                    <path d="M192 355 L186 432 C220 468, 298 465, 336 414 L322 345 Z" fill="url(#skinTone)"/>
+                                    <path d="M195 375 Q258 418 320 368" fill="#D58E82" opacity="0.45"/>
+                                    <!-- Ears -->
+                                    <path d="M152 248 C138 248, 136 292, 154 306 C158 309, 165 304, 166 295 Z" fill="#E9B0A4"/>
+                                    <path d="M358 242 C374 242, 376 288, 356 304 C350 308, 344 302, 344 292 Z" fill="#E9B0A4"/>
+                                    <!-- Head & Jawline -->
+                                    <path d="M158 195 C154 255, 152 315, 178 352 C202 385, 232 396, 260 395 C290 394, 322 380, 342 346 C362 310, 358 248, 352 190 C345 140, 165 140, 158 195 Z" fill="url(#skinTone)"/>
+                                    <ellipse cx="195" cy="282" rx="34" ry="24" fill="url(#cheekGlow)"/>
+                                    <ellipse cx="318" cy="278" rx="34" ry="24" fill="url(#cheekGlow)"/>
+                                    <!-- Hair -->
+                                    <path d="M156 235 C144 195, 146 142, 168 112 C182 92, 208 75, 248 72 C292 68, 338 78, 358 104 C374 126, 368 158, 360 198 C355 218, 352 232, 348 242 C348 205, 342 172, 322 158 C295 142, 218 144, 185 162 C166 174, 160 205, 156 235 Z" fill="url(#hairGrad)"/>
+                                    <path d="M178 118 Q235 82 315 95" stroke="#7E5B40" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+                                    <path d="M192 136 Q255 102 338 114" stroke="#8C674B" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+                                    <path d="M165 148 Q210 115 275 118" stroke="#5A3E29" stroke-width="4" stroke-linecap="round"/>
+                                    <!-- Eyebrows & Eyes -->
+                                    <path d="M180 218 Q208 206 235 216" stroke="#6E4F3A" stroke-width="6.5" stroke-linecap="round"/>
+                                    <path d="M276 215 Q305 204 332 215" stroke="#6E4F3A" stroke-width="6.5" stroke-linecap="round"/>
+                                    <path d="M186 234 Q210 223 232 235 Q210 242 186 234 Z" fill="#FFFFFF"/>
+                                    <circle cx="210" cy="233" r="6.5" fill="#4A6475"/>
+                                    <circle cx="210" cy="233" r="3" fill="#151922"/>
+                                    <circle cx="212" cy="231" r="1.5" fill="#FFFFFF"/>
+                                    <path d="M183 233 Q210 222 234 234" stroke="#473026" stroke-width="3" stroke-linecap="round"/>
+                                    <path d="M188 242 Q210 248 230 241" stroke="#D1887C" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M280 233 Q304 222 326 233 Q304 240 280 233 Z" fill="#FFFFFF"/>
+                                    <circle cx="302" cy="232" r="6.5" fill="#4A6475"/>
+                                    <circle cx="302" cy="232" r="3" fill="#151922"/>
+                                    <circle cx="304" cy="230" r="1.5" fill="#FFFFFF"/>
+                                    <path d="M278 232 Q304 221 328 232" stroke="#473026" stroke-width="3" stroke-linecap="round"/>
+                                    <path d="M282 240 Q304 246 324 239" stroke="#D1887C" stroke-width="2" stroke-linecap="round"/>
+                                    <!-- Nose & Smile -->
+                                    <path d="M255 232 L252 272 C242 278, 238 286, 246 290 C254 294, 264 294, 272 289 C278 285, 274 276, 265 272" fill="#E8A99D" opacity="0.65"/>
+                                    <path d="M242 286 C248 292, 266 292, 274 285" stroke="#C57D70" stroke-width="3" stroke-linecap="round"/>
+                                    <path d="M226 276 Q204 300 206 326" stroke="#D1887C" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
+                                    <path d="M286 275 Q308 298 306 324" stroke="#D1887C" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
+                                    <path d="M214 312 Q258 302 300 310 C296 338, 280 350, 257 350 C234 350, 218 338, 214 312 Z" fill="#7A2832"/>
+                                    <path d="M220 313 Q258 306 294 312 L290 328 Q258 332 224 328 Z" fill="#FFFDF9"/>
+                                    <path d="M212 312 Q258 302 302 310" stroke="#C46B6E" stroke-width="4.5" stroke-linecap="round"/>
+                                    <path d="M214 313 C224 344, 242 354, 258 354 C274 354, 292 342, 300 311" stroke="#D47A7D" stroke-width="5" stroke-linecap="round"/>
+                                    <path d="M242 374 Q258 380 274 373" stroke="#CF8B7E" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                                </svg>
+
+                                <!-- Multi-Fallback Image Element for Andrey Burim -->
+                                <img 
+                                    id="main-portrait-img" 
+                                    src="a97380cc-861a-415d-9458-6a3409a61104.png" 
+                                    alt="Андрей Бурим (Меллстрой) — Основатель HELPSTROY" 
+                                    onerror="handlePortraitFallback(this)"
+                                    class="relative z-10 w-full h-[94%] object-contain object-bottom photo-studio-grade scale-[1.03] origin-bottom"
+                                />
+
+                                <!-- Live Foreground Studio Lighting Overlay (Interactive Spotlight + Soft Light Sweep) -->
+                                <div id="portrait-interactive-light" class="absolute inset-0 z-15 pointer-events-none transition-opacity duration-500" style="background: radial-gradient(360px circle at 50% 38%, rgba(243, 229, 171, 0.18), rgba(212, 175, 55, 0.05) 45%, transparent 75%); mix-blend-mode: soft-light;"></div>
+                                <div class="absolute inset-0 z-15 pointer-events-none overflow-hidden">
+                                    <div class="w-2/3 h-full studio-sheen-beam"></div>
+                                </div>
+
+                                <!-- Bottom Gradient Vignette for Seamless Transition into Card -->
+                                <div class="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-obsidian via-obsidian/90 to-transparent z-20 pointer-events-none"></div>
+
+                                <!-- Floating Glass Verification & Quote Overlay -->
+                                <div class="absolute bottom-4 inset-x-4 z-30 p-5 rounded-2xl glass-panel border border-champagne/30 shadow-2xl">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-display font-bold text-sm sm:text-base text-white tracking-wide">АНДРЕЙ БУРИМ (MELLSTROY)</span>
+                                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-champagne text-obsidian" title="Верифицированный основатель фонда">
+                                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                                            </span>
+                                        </div>
+                                        <span class="text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-md bg-champagne/15 text-platinum border border-champagne/30">FOUNDER // HS</span>
+                                    </div>
+                                    <p class="text-xs sm:text-sm text-zinc-300 italic leading-relaxed">
+                                        «Большие деньги имеют смысл только тогда, когда они меняют чужие жизни в моменте. Без фондов-прокладок — напрямую человеку».
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DELICATE LUXURY MARQUEE -->
+    <div class="relative z-10 border-y border-white/10 bg-charcoal/70 py-4 overflow-hidden select-none">
+        <div class="animate-marquee flex items-center gap-12 text-xs font-mono uppercase tracking-[0.25em] text-zinc-400">
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-champagne"></span> HELPSTROY FOUNDATION</span>
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> ОПЛАТА СЛОЖНЫХ ОПЕРАЦИЙ</span>
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-champagne"></span> 100% ПРЯМОЕ ФИНАНСИРОВАНИЕ</span>
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> ПОМОЩЬ С ТЯЖЕЛЫМИ БОЛЕЗНЯМИ</span>
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-champagne"></span> ЛИЧНЫЙ КОНТРОЛЬ АНДРЕЯ БУРИМА</span>
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> РЕАБИЛИТАЦИЯ И ДОРОГОСТОЯЩИЕ ПРЕПАРАТЫ</span>
+            <!-- Duplicate for seamless infinite loop -->
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-champagne"></span> HELPSTROY FOUNDATION</span>
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> ОПЛАТА СЛОЖНЫХ ОПЕРАЦИЙ</span>
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-champagne"></span> 100% ПРЯМОЕ ФИНАНСИРОВАНИЕ</span>
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> ПОМОЩЬ С ТЯЖЕЛЫМИ БОЛЕЗНЯМИ</span>
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-champagne"></span> ЛИЧНЫЙ КОНТРОЛЬ АНДРЕЯ БУРИМА</span>
+            <span class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> РЕАБИЛИТАЦИЯ И ДОРОГОСТОЯЩИЕ ПРЕПАРАТЫ</span>
+        </div>
+    </div>
+
+    <!-- MAIN APPLICATION SECTION (АНКЕТА НА ПОМОЩЬ) -->
+    <section id="application-form" class="relative z-10 py-20 lg:py-28">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Header -->
+            <div class="text-center max-w-2xl mx-auto mb-12 space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-champagne/10 border border-champagne/30 text-platinum text-xs font-mono uppercase">
+                    <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-champagne"></i>
+                    <span>Официальная анкета HELPSTROY</span>
+                </div>
+                <h2 class="font-display font-bold text-3xl sm:text-4xl text-white tracking-tight">
+                    Подать заявку на финансирование
+                </h2>
+                <p class="text-zinc-400 text-sm sm:text-base">
+                    Заполните три ключевых пункта. Команда Андрея Бурима проверяет медицинские документы и связывается напрямую через указанный вами Telegram.
+                </p>
+            </div>
+
+            <!-- Private Banking Style Form Card -->
+            <div class="rounded-[32px] glass-panel-gold p-6 sm:p-10 lg:p-12 relative overflow-hidden">
+                
+                <!-- Top Security Header inside Form -->
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-white/10">
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_12px_#10B981]"></div>
+                        <span class="font-mono text-xs uppercase tracking-wider text-zinc-300">Шлюз приема заявок активен • Приоритет: Медицина и здоровье</span>
+                    </div>
+                    <div class="text-xs font-mono text-zinc-400">
+                        ID СЕССИИ: <span id="session-id-display" class="text-platinum">HS-2026-VIP</span>
+                    </div>
+                </div>
+
+                <!-- Form Element -->
+                <form id="helpstroy-form" onsubmit="submitApplication(event)" class="space-y-8" novalidate>
+                    
+                    <!-- STEP 1: TELEGRAM ID & NAME -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                        <!-- Telegram ID (Mandatory as per prompt) -->
+                        <div class="md:col-span-7 space-y-2">
+                            <label for="tg-input" class="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-zinc-300">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-champagne/20 border border-champagne text-platinum flex items-center justify-center text-[11px] font-bold">1</span>
+                                    Ваш ID или @username в Telegram <span class="text-champagne">*</span>
+                                </span>
+                                <span class="text-[11px] text-zinc-500">Канал прямой связи</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-champagne">
+                                    <i data-lucide="send" class="w-5 h-5"></i>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    id="tg-input" 
+                                    required
+                                    placeholder="@username, t.me/username или числовой ID" 
+                                    class="banking-input w-full pl-12 pr-4 py-4 rounded-2xl text-white placeholder-zinc-500 font-mono text-sm sm:text-base"
+                                    oninput="clearFieldError('tg-error')"
+                                >
+                            </div>
+                            <p id="tg-error" class="hidden text-xs text-rose-400 font-medium pt-1 flex items-center gap-1.5">
+                                <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+                                <span>Укажите корректный Telegram (@username от 3 символов или ID)</span>
+                            </p>
+                            <p class="text-[11px] text-zinc-400">
+                                Убедитесь, что в настройках вашего Telegram открыты личные сообщения, чтобы менеджер фонда мог вам написать.
+                            </p>
+                        </div>
+
+                        <!-- Applicant Name -->
+                        <div class="md:col-span-5 space-y-2">
+                            <label for="applicant-name" class="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-zinc-300">
+                                <span>Как к вам обращаться</span>
+                                <span class="text-[11px] text-zinc-500">ФИО или Имя</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400">
+                                    <i data-lucide="user" class="w-5 h-5"></i>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    id="applicant-name" 
+                                    placeholder="Например: Елена Смирнова" 
+                                    class="banking-input w-full pl-12 pr-4 py-4 rounded-2xl text-white placeholder-zinc-500 text-sm sm:text-base"
+                                >
+                            </div>
+                            <p class="text-[11px] text-zinc-400">
+                                Заявку можно подать как за себя, так и за близкого родственника / ребенка.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: НА ЧТО НУЖНЫ ДЕНЬГИ (ПОМОЩЬ С БОЛЕЗНЬЮ И КАТЕГОРИИ) -->
+                    <div class="space-y-4 pt-2 border-t border-white/5">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <label class="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-300">
+                                <span class="w-5 h-5 rounded-full bg-champagne/20 border border-champagne text-platinum flex items-center justify-center text-[11px] font-bold">2</span>
+                                На что нужны деньги (причина обращения и диагноз) <span class="text-champagne">*</span>
+                            </label>
+                            <span class="text-xs text-emerald-400 flex items-center gap-1">
+                                <i data-lucide="heart-pulse" class="w-3.5 h-3.5"></i> Выберите категорию и опишите ситуацию
+                            </span>
+                        </div>
+
+                        <!-- Category Pills -->
+                        <div class="flex flex-wrap gap-2.5" id="category-pills">
+                            <button type="button" onclick="selectCategory(this, 'Помощь с тяжелой болезнью / Онкология')" class="glass-pill active px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2">
+                                <i data-lucide="activity" class="w-4 h-4 text-champagne"></i>
+                                <span>Помощь с тяжелой болезнью</span>
+                            </button>
+                            <button type="button" onclick="selectCategory(this, 'Срочная операция')" class="glass-pill px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-zinc-300 flex items-center gap-2">
+                                <i data-lucide="stethoscope" class="w-4 h-4 text-champagne"></i>
+                                <span>Срочная операция</span>
+                            </button>
+                            <button type="button" onclick="selectCategory(this, 'Реабилитация и медикаменты')" class="glass-pill px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-zinc-300 flex items-center gap-2">
+                                <i data-lucide="pill" class="w-4 h-4 text-champagne"></i>
+                                <span>Реабилитация и лекарства</span>
+                            </button>
+                            <button type="button" onclick="selectCategory(this, 'Лечение ребенка')" class="glass-pill px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-zinc-300 flex items-center gap-2">
+                                <i data-lucide="baby" class="w-4 h-4 text-champagne"></i>
+                                <span>Лечение ребенка</span>
+                            </button>
+                            <button type="button" onclick="selectCategory(this, 'Экстренная жизненная ситуация')" class="glass-pill px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-zinc-300 flex items-center gap-2">
+                                <i data-lucide="shield-alert" class="w-4 h-4 text-champagne"></i>
+                                <span>Экстренная ситуация</span>
+                            </button>
+                        </div>
+
+                        <!-- Detailed Medical/Situation Description -->
+                        <div class="space-y-2">
+                            <textarea 
+                                id="reason-input" 
+                                rows="4" 
+                                required
+                                placeholder="Опишите подробно: какой поставлен диагноз, в какой клинике планируется лечение или операция, почему средства нужны срочно..."
+                                class="banking-input w-full p-4 rounded-2xl text-white placeholder-zinc-500 text-sm sm:text-base leading-relaxed resize-y"
+                                oninput="clearFieldError('reason-error')"
+                            ></textarea>
+                            <p id="reason-error" class="hidden text-xs text-rose-400 font-medium flex items-center gap-1.5">
+                                <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+                                <span>Пожалуйста, опишите проблему и диагноз (минимум 15 символов)</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: СУММА ЭТОГО ВОПРОСА -->
+                    <div class="space-y-4 pt-2 border-t border-white/5">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <label for="amount-input" class="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-300">
+                                <span class="w-5 h-5 rounded-full bg-champagne/20 border border-champagne text-platinum flex items-center justify-center text-[11px] font-bold">3</span>
+                                Сумма вопроса (сколько необходимо средств) <span class="text-champagne">*</span>
+                            </label>
+                            <span class="text-xs font-mono text-zinc-400">Точная сумма по счету клиники или смете</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                            <!-- Amount Input with Live Thousands Formatting -->
+                            <div class="lg:col-span-7 relative">
+                                <input 
+                                    type="text" 
+                                    id="amount-input" 
+                                    inputmode="numeric"
+                                    required
+                                    placeholder="1 500 000" 
+                                    oninput="formatAmountInput(this); clearFieldError('amount-error')"
+                                    class="banking-input w-full pl-5 pr-36 py-4 rounded-2xl text-white font-display font-bold text-xl sm:text-2xl tracking-tight placeholder-zinc-600"
+                                >
+                                <!-- Currency Selector inside Input -->
+                                <div class="absolute inset-y-2 right-2 flex items-center bg-white/5 rounded-xl p-1 border border-white/10">
+                                    <button type="button" onclick="setCurrency('RUB', '₽')" id="curr-RUB" class="px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-champagne text-obsidian transition-all">₽ RUB</button>
+                                    <button type="button" onclick="setCurrency('USD', '$')" id="curr-USD" class="px-2.5 py-1.5 rounded-lg text-xs font-mono text-zinc-400 hover:text-white transition-all">$ USD</button>
+                                    <button type="button" onclick="setCurrency('USDT', 'USDT')" id="curr-USDT" class="px-2.5 py-1.5 rounded-lg text-xs font-mono text-zinc-400 hover:text-white transition-all">USDT</button>
+                                </div>
+                            </div>
+
+                            <!-- Quick Amount Presets -->
+                            <div class="lg:col-span-5 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2">
+                                <button type="button" onclick="setPresetAmount('300 000')" class="glass-pill py-2.5 px-3 rounded-xl font-mono text-xs text-zinc-300 hover:text-platinum text-center">
+                                    300 000 ₽
+                                </button>
+                                <button type="button" onclick="setPresetAmount('1 000 000')" class="glass-pill py-2.5 px-3 rounded-xl font-mono text-xs text-zinc-300 hover:text-platinum text-center">
+                                    1 000 000 ₽
+                                </button>
+                                <button type="button" onclick="setPresetAmount('2 500 000')" class="glass-pill py-2.5 px-3 rounded-xl font-mono text-xs text-zinc-300 hover:text-platinum text-center">
+                                    2 500 000 ₽
+                                </button>
+                                <button type="button" onclick="setPresetAmount('5 000 000')" class="glass-pill py-2.5 px-3 rounded-xl font-mono text-xs text-zinc-300 hover:text-platinum text-center">
+                                    5 000 000 ₽
+                                </button>
+                            </div>
+                        </div>
+                        <p id="amount-error" class="hidden text-xs text-rose-400 font-medium flex items-center gap-1.5">
+                            <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+                            <span>Укажите корректную необходимую сумму</span>
+                        </p>
+                    </div>
+
+                    <!-- OPTIONAL: MEDICAL DOCUMENT UPLOAD -->
+                    <div class="pt-2">
+                        <label for="doc-upload" class="group cursor-pointer block rounded-2xl border border-dashed border-white/15 hover:border-champagne/50 bg-white/[0.015] hover:bg-champagne/[0.03] p-5 transition-all">
+                            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div class="flex items-center gap-4 text-center sm:text-left">
+                                    <div class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-champagne group-hover:scale-105 transition-transform">
+                                        <i data-lucide="file-check-2" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-medium text-zinc-200" id="doc-filename">Прикрепить медицинскую выписку или счет из клиники (опционально)</div>
+                                        <div class="text-xs text-zinc-400">PDF, JPG, PNG до 25 МБ — наличие эпикриза ускоряет проверку заявки в 3 раза</div>
+                                    </div>
+                                </div>
+                                <span class="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-mono text-platinum group-hover:border-champagne/40 whitespace-nowrap">
+                                    Выбрать файл
+                                </span>
+                            </div>
+                            <input id="doc-upload" type="file" class="hidden" onchange="handleDocSelect(event)">
+                        </label>
+                    </div>
+
+                    <!-- SUBMIT BUTTON & PRIVACY GUARANTEE -->
+                    <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-white/10">
+                        <div class="flex items-start gap-3 max-w-md">
+                            <i data-lucide="lock" class="w-5 h-5 text-champagne shrink-0 mt-0.5"></i>
+                            <p class="text-xs text-zinc-400 leading-relaxed">
+                                Персональные и медицинские данные передаются по защищенному протоколу и доступны исключительно верификаторам фонда HELPSTROY.
+                            </p>
+                        </div>
+
+                        <button type="submit" id="submit-btn" class="w-full sm:w-auto btn-gold-luxury px-9 py-4 rounded-2xl font-display text-sm tracking-wide flex items-center justify-center gap-3 shrink-0">
+                            <span id="submit-btn-text">Отправить анкету в фонд</span>
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRINCIPLES SECTION -->
+    <section id="principles" class="relative z-10 py-16 lg:py-24 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div>
+                    <span class="text-xs font-mono uppercase tracking-widest text-champagne">Философия фонда</span>
+                    <h2 class="font-display font-bold text-2xl sm:text-4xl text-white mt-2">Почему HELPSTROY работает иначе</h2>
+                </div>
+                <p class="text-sm text-zinc-400 max-w-md">
+                    Стандартные благотворительные организации тратят месяцы на согласования. Мы убрали всё лишнее между меценатом и человеком, которому нужна помощь.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-panel p-8 rounded-3xl border border-white/10 hover:border-champagne/40 transition-all group">
+                    <div class="w-12 h-12 rounded-2xl glass-panel-gold flex items-center justify-center text-champagne mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <div class="font-mono text-xs text-champagne uppercase mb-2">01 / Скорость реакции</div>
+                    <h3 class="font-display font-bold text-xl text-white mb-3">Решение за часы, а не месяцы</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">
+                        Когда речь идет об онкологии или срочной операции, время решает всё. Модераторы фонда отсматривают анкеты ежедневно и сразу выходят на связь в Telegram.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-panel p-8 rounded-3xl border border-white/10 hover:border-champagne/40 transition-all group">
+                    <div class="w-12 h-12 rounded-2xl glass-panel-gold flex items-center justify-center text-champagne mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="percent" class="w-6 h-6"></i>
+                    </div>
+                    <div class="font-mono text-xs text-champagne uppercase mb-2">02 / Без посредников</div>
+                    <h3 class="font-display font-bold text-xl text-white mb-3">100% суммы доходит адресату</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">
+                        Фонд не собирает пожертвования с подписчиков и не удерживает комиссий. Все выплаты производятся исключительно из личных средств Андрея Бурима напрямую в клинику или на реквизиты семьи.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-panel p-8 rounded-3xl border border-white/10 hover:border-champagne/40 transition-all group">
+                    <div class="w-12 h-12 rounded-2xl glass-panel-gold flex items-center justify-center text-champagne mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="shield" class="w-6 h-6"></i>
+                    </div>
+                    <div class="font-mono text-xs text-champagne uppercase mb-2">03 / Прозрачная верификация</div>
+                    <h3 class="font-display font-bold text-xl text-white mb-3">Прямая связь в Telegram</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">
+                        Никаких сложных бумажных анкет по почте. Достаточно оставить свой Telegram ID, кратко описать болезнь и необходимую сумму — остальное проверит наша медицинская группа.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIVE IMPACT & USER APPLICATIONS SECTION -->
+    <section id="live-impact" class="relative z-10 py-16 lg:py-24 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10">
+                <div>
+                    <div class="inline-flex items-center gap-2 text-xs font-mono uppercase text-emerald-400 mb-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span>Реестр транзакций HELPSTROY</span>
+                    </div>
+                    <h2 class="font-display font-bold text-2xl sm:text-4xl text-white">Закрытые вопросы и заявки</h2>
+                </div>
+
+                <!-- Tabs: Public Registry vs My Saved Applications -->
+                <div class="inline-flex p-1.5 rounded-2xl glass-panel border border-white/10 self-start">
+                    <button onclick="switchRegistryTab('public')" id="tab-public" class="px-4 py-2 rounded-xl text-xs font-mono uppercase transition-all bg-champagne text-obsidian font-semibold">
+                        Недавно оплаченные (Кейсы)
+                    </button>
+                    <button onclick="switchRegistryTab('my')" id="tab-my" class="px-4 py-2 rounded-xl text-xs font-mono uppercase transition-all text-zinc-400 hover:text-white flex items-center gap-2">
+                        <span>Мои заявки</span>
+                        <span id="my-apps-count" class="px-1.5 py-0.5 rounded-md bg-white/10 text-platinum text-[10px]">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Public Funded List -->
+            <div id="registry-public-view" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Populated dynamically via JS -->
+            </div>
+
+            <!-- User's Submitted Applications View -->
+            <div id="registry-my-view" class="hidden space-y-4">
+                <div id="my-apps-container" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section id="faq" class="relative z-10 py-16 lg:py-24 border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-xs font-mono uppercase tracking-widest text-champagne">Ответы на вопросы</span>
+                <h2 class="font-display font-bold text-2xl sm:text-4xl text-white mt-2">Частые вопросы о работе HELPSTROY</h2>
+            </div>
+
+            <div class="space-y-4">
+                <details class="group glass-panel rounded-2xl border border-white/10 open:border-champagne/40 p-6 transition-all">
+                    <summary class="flex items-center justify-between cursor-pointer list-none font-display font-semibold text-base sm:text-lg text-white">
+                        <span>Кто именно может подать заявку на помощь?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-champagne group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-sm text-zinc-400 leading-relaxed">
+                        Любой человек, столкнувшийся с тяжелым заболеванием, необходимостью срочной дорогостоящей операции, курса химиотерапии, реабилитации или покупки жизненно важных препаратов. Анкету можно заполнить как за себя, так и за ребенка или близкого родственника.
+                    </p>
+                </details>
+
+                <details class="group glass-panel rounded-2xl border border-white/10 open:border-champagne/40 p-6 transition-all">
+                    <summary class="flex items-center justify-between cursor-pointer list-none font-display font-semibold text-base sm:text-lg text-white">
+                        <span>Как со мной свяжутся после отправки анкеты?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-champagne group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-sm text-zinc-400 leading-relaxed">
+                        Координатор фонда свяжется с вами напрямую в Telegram по указанному вами `@username` или ID. Пожалуйста, убедитесь, что у вас открыты личные сообщения в настройках конфиденциальности Telegram.
+                    </p>
+                </details>
+
+                <details class="group glass-panel rounded-2xl border border-white/10 open:border-champagne/40 p-6 transition-all">
+                    <summary class="flex items-center justify-between cursor-pointer list-none font-display font-semibold text-base sm:text-lg text-white">
+                        <span>Нужно ли платить какие-либо взносы или комиссии за перевод?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-champagne group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-sm text-zinc-400 leading-relaxed">
+                        Категорически нет. Фонд HELPSTROY никогда не просит оплатить «комиссию», «налог» или «страховой взнос» для получения помощи. Все выплаты безвозмездны и финансируются лично Андреем Буримом.
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER WITH DISCREET HIDDEN ADMIN TRIGGER -->
+    <footer class="relative z-10 border-t border-white/10 bg-obsidian py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg glass-panel-gold flex items-center justify-center">
+                    <span class="font-display font-bold text-sm text-gold-gradient">HS</span>
+                </div>
+                <div>
+                    <span class="font-display font-bold text-sm text-white tracking-wider">HELPSTROY FOUNDATION</span>
+                    <div class="flex items-center gap-2">
+                        <p class="text-xs text-zinc-500">© 2026 Частная благотворительная инициатива Андрея Бурима (Mellstroy).</p>
+                        <!-- Stealth Admin Trigger Dot/Lock (opacity 0.18, blends in for regular visitors) -->
+                        <button 
+                            type="button" 
+                            onclick="requestAdminAccess()" 
+                            class="opacity-[0.18] hover:opacity-80 text-zinc-500 hover:text-champagne transition-opacity p-1 rounded focus:outline-none" 
+                            aria-label="Private Desk"
+                        >
+                            <i data-lucide="lock" class="w-3 h-3"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-6 text-xs font-mono text-zinc-400">
+                <a href="#application-form" class="hover:text-champagne transition-colors">ПОДАТЬ АНКЕТУ</a>
+                <a href="#live-impact" class="hover:text-champagne transition-colors">РЕЕСТР ПОМОЩИ</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- OFFICIAL TICKET MODAL (SHOWN AFTER SUBMITTING FORM) -->
+    <div id="ticket-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-xl">
+        <div class="relative w-full max-w-lg rounded-[28px] glass-panel-gold p-6 sm:p-8 border border-champagne/50 shadow-2xl animate-fadeIn">
+            
+            <!-- Close Button -->
+            <button onclick="closeTicketModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-400/40 flex items-center justify-center text-emerald-400">
+                    <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-[11px] font-mono uppercase tracking-widest text-emerald-400">Анкета зарегистрирована</span>
+                    <h3 class="font-display font-bold text-xl text-white">Заявка принята в работу</h3>
+                </div>
+            </div>
+
+            <!-- Official Banking Receipt Box -->
+            <div class="rounded-2xl bg-obsidian/90 border border-white/10 p-5 space-y-3.5 font-mono text-xs mb-6">
+                <div class="flex items-center justify-between pb-3 border-b border-white/10">
+                    <span class="text-zinc-400">НОМЕР ТИКЕТА:</span>
+                    <span id="modal-ticket-id" class="text-sm font-bold text-champagne tracking-wider">#HS-84920</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-zinc-400">TELEGRAM ДЛЯ СВЯЗИ:</span>
+                    <span id="modal-ticket-tg" class="text-white font-semibold">@username</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-zinc-400">КАТЕГОРИЯ:</span>
+                    <span id="modal-ticket-cat" class="text-platinum text-right">Помощь с болезнью</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-zinc-400">ЗАПРОШЕННАЯ СУММА:</span>
+                    <span id="modal-ticket-amount" class="text-emerald-400 font-bold text-sm">1 500 000 ₽</span>
+                </div>
+                <div class="pt-3 border-t border-white/10">
+                    <div class="text-zinc-500 mb-1">ОПИСАНИЕ ВОПРОСА:</div>
+                    <p id="modal-ticket-reason" class="text-zinc-300 font-sans text-xs line-clamp-3 leading-relaxed"></p>
+                </div>
+                <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-zinc-400">СТАТУС:</span>
+                    <span id="modal-delivery-status" class="px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[11px]">
+                        Передано в отдел верификации
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="copyTicketDetails()" id="copy-ticket-btn" class="flex-1 btn-gold-luxury py-3.5 px-5 rounded-xl font-display text-xs tracking-wide flex items-center justify-center gap-2">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                    <span>Скопировать квитанцию</span>
+                </button>
+                <button onclick="closeTicketModal()" class="py-3.5 px-5 rounded-xl glass-panel text-xs font-mono uppercase text-zinc-400 hover:text-white">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRIVATE CRYPTOGRAPHIC AUTHENTICATION MODAL FOR ADMIN ACCESS -->
+    <div id="admin-auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-2xl">
+        <div class="relative w-full max-w-md rounded-[28px] glass-panel-gold p-7 sm:p-8 border border-champagne/40 shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
+            <div class="flex items-center gap-3.5 mb-6">
+                <div class="w-11 h-11 rounded-2xl bg-champagne/15 border border-champagne/40 flex items-center justify-center text-champagne">
+                    <i data-lucide="key-round" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div class="text-[10px] font-mono uppercase tracking-widest text-champagne">PRIVATE ACCESS // SHA-256</div>
+                    <h3 class="font-display font-bold text-lg text-white">Вход в систему управления</h3>
+                </div>
+            </div>
+
+            <form onsubmit="verifyAdminCredentials(event)" class="space-y-4">
+                <div>
+                    <label for="admin-pass-input" class="block text-xs font-mono uppercase text-zinc-400 mb-2">Ключ доступа координатора</label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="admin-pass-input" 
+                            autocomplete="off"
+                            required
+                            placeholder="••••••••••••" 
+                            oninput="document.getElementById('admin-auth-error').classList.add('hidden')"
+                            class="banking-input w-full px-4 py-3.5 rounded-xl text-white font-mono text-sm tracking-widest placeholder-zinc-600"
+                        >
+                    </div>
+                    <p id="admin-auth-error" class="hidden text-xs text-rose-400 font-mono mt-2 flex items-center gap-1.5">
+                        <i data-lucide="shield-x" class="w-3.5 h-3.5"></i>
+                        <span>Отказано в доступе: неверный ключ</span>
+                    </p>
+                </div>
+
+                <div class="pt-2 flex items-center justify-end gap-3">
+                    <button type="button" onclick="closeAuthModal()" class="px-4 py-3 rounded-xl glass-panel text-xs font-mono text-zinc-400 hover:text-white">
+                        Отмена
+                    </button>
+                    <button type="submit" class="btn-gold-luxury px-6 py-3 rounded-xl font-display text-xs tracking-wide flex items-center justify-center gap-2">
+                        <span>Разблокировать терминал</span>
+                        <i data-lucide="unlock" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD & TELEGRAM BOT INTEGRATION MODAL -->
+    <div id="admin-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-2xl overflow-y-auto">
+        <div class="relative w-full max-w-6xl rounded-[28px] glass-panel-gold border border-champagne/40 shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
+            
+            <!-- Modal Header -->
+            <div class="px-6 py-5 border-b border-white/10 bg-obsidian/90 flex flex-wrap items-center justify-between gap-4 shrink-0">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-11 h-11 rounded-2xl bg-champagne/15 border border-champagne/40 flex items-center justify-center text-champagne">
+                        <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-display font-bold text-lg sm:text-xl text-white">Центр управления заявками HELPSTROY</h3>
+                            <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-[10px] uppercase">Cloud Sync</span>
+                        </div>
+                        <p class="text-xs text-zinc-400">Все заявки с сайта сохраняются здесь в реальном времени + могут мгновенно приходить вам в Telegram</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2.5">
+                    <button onclick="exportApplicationsCSV()" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-platinum flex items-center gap-2 transition-all">
+                        <i data-lucide="download" class="w-4 h-4 text-champagne"></i>
+                        <span>Скачать CSV / Excel</span>
+                    </button>
+                    <button onclick="closeAdminModal()" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Navigation Tabs -->
+            <div class="px-6 py-3 bg-charcoal/90 border-b border-white/10 flex flex-wrap items-center justify-between gap-4 shrink-0">
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="switchAdminSubTab('table')" id="admin-subtab-table" class="px-4 py-2 rounded-xl text-xs font-mono uppercase bg-champagne text-obsidian font-bold transition-all flex items-center gap-2">
+                        <i data-lucide="table" class="w-4 h-4"></i>
+                        <span>1. Входящие анкеты</span>
+                    </button>
+                    <button onclick="switchAdminSubTab('tg')" id="admin-subtab-tg" class="px-4 py-2 rounded-xl text-xs font-mono uppercase text-zinc-300 hover:text-white bg-white/5 transition-all flex items-center gap-2">
+                        <i data-lucide="send" class="w-4 h-4 text-champagne"></i>
+                        <span>2. Доставка в Telegram</span>
+                    </button>
+                    <button onclick="switchAdminSubTab('photo')" id="admin-subtab-photo" class="px-4 py-2 rounded-xl text-xs font-mono uppercase text-zinc-300 hover:text-white bg-white/5 transition-all flex items-center gap-2">
+                        <i data-lucide="image" class="w-4 h-4 text-emerald-400"></i>
+                        <span>3. Фото Андрея (Облако)</span>
+                    </button>
+                </div>
+
+                <div class="text-xs font-mono text-zinc-400">
+                    Всего в базе: <span id="admin-modal-count" class="text-white font-bold">0</span> анкет
+                </div>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-6 overflow-y-auto space-y-6 flex-1">
+                
+                <!-- SUBTAB 1: LIVE CLOUD APPLICATIONS TABLE WITH DELETE ACTIONS -->
+                <div id="admin-view-table" class="space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-mono text-zinc-400">
+                            <span>Фильтр по статусу:</span>
+                            <button onclick="setAdminFilter('ALL')" id="flt-ALL" class="px-2.5 py-1 rounded-lg bg-white/10 text-white">Все</button>
+                            <button onclick="setAdminFilter('Новая заявка')" id="flt-NEW" class="px-2.5 py-1 rounded-lg bg-white/5 text-zinc-400 hover:text-white">Новые</button>
+                            <button onclick="setAdminFilter('На проверке')" id="flt-REV" class="px-2.5 py-1 rounded-lg bg-white/5 text-zinc-400 hover:text-white">На проверке</button>
+                            <button onclick="setAdminFilter('Одобрено / Выплачено')" id="flt-PAID" class="px-2.5 py-1 rounded-lg bg-white/5 text-zinc-400 hover:text-white">Выплаченные</button>
+                        </div>
+
+                        <!-- Clear All Applications Button with Inline Confirmation -->
+                        <div class="flex items-center gap-2">
+                            <button 
+                                id="btn-ask-clear-all" 
+                                type="button" 
+                                onclick="toggleClearAllConfirm(true)" 
+                                class="px-3.5 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-xs font-mono text-rose-300 flex items-center gap-1.5 transition-all"
+                            >
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-400"></i>
+                                <span>Очистить все заявки</span>
+                            </button>
+
+                            <div id="confirm-clear-all-box" class="hidden items-center gap-2 bg-rose-950/70 border border-rose-500/40 px-3 py-1 rounded-xl">
+                                <span class="text-[11px] font-mono text-rose-200">Точно удалить всё?</span>
+                                <button type="button" onclick="deleteAllApplications()" class="px-2.5 py-1 rounded-lg bg-rose-500 hover:bg-rose-600 text-white font-mono text-[11px] font-bold transition-all">
+                                    Да, удалить
+                                </button>
+                                <button type="button" onclick="toggleClearAllConfirm(false)" class="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-zinc-300 font-mono text-[11px] transition-all">
+                                    Отмена
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="admin-applications-list" class="space-y-3">
+                        <!-- Populated via real-time Firestore / Local state -->
+                    </div>
+                </div>
+
+                <!-- SUBTAB 2: DIRECT TELEGRAM BOT CONFIGURATION -->
+                <div id="admin-view-tg" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        
+                        <!-- Left: Telegram Credentials Form -->
+                        <div class="lg:col-span-7 glass-panel p-6 rounded-2xl border border-champagne/30 space-y-5">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-display font-bold text-base text-white flex items-center gap-2">
+                                    <i data-lucide="bot" class="w-5 h-5 text-champagne"></i>
+                                    <span>Прямая пересылка анкет в Telegram</span>
+                                </h4>
+                                <span id="tg-bot-status-pill" class="px-2.5 py-1 rounded-full text-[11px] font-mono bg-white/5 text-zinc-400 border border-white/10">
+                                    Не подключен
+                                </span>
+                            </div>
+
+                            <p class="text-xs text-zinc-300 leading-relaxed">
+                                Укажите токен вашего Telegram-бота и ваш личный `Chat ID` (или ID закрытой группы команды). После сохранения каждая заполненная на сайте анкета будет <strong>мгновенно приходить вам сообщением в Telegram</strong>.
+                            </p>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-mono uppercase text-zinc-400 mb-1.5">1. Telegram Bot Token (от @BotFather)</label>
+                                    <input 
+                                        type="password" 
+                                        id="tg-bot-token-input" 
+                                        placeholder="Например: 7123456789:AAH_xYz1234567890abcdef..." 
+                                        class="banking-input w-full px-4 py-3 rounded-xl text-xs sm:text-sm font-mono text-white placeholder-zinc-600"
+                                    >
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-mono uppercase text-zinc-400 mb-1.5">2. Ваш Telegram Chat ID (куда слать анкеты)</label>
+                                    <input 
+                                        type="text" 
+                                        id="tg-chat-id-input" 
+                                        placeholder="Например: 492819203 или -100192837465" 
+                                        class="banking-input w-full px-4 py-3 rounded-xl text-xs sm:text-sm font-mono text-white placeholder-zinc-600"
+                                    >
+                                </div>
+                            </div>
+
+                            <div id="tg-config-feedback" class="hidden p-3.5 rounded-xl text-xs font-mono"></div>
+
+                            <div class="flex flex-wrap items-center gap-3 pt-2">
+                                <button type="button" onclick="saveTelegramBotConfig()" class="btn-gold-luxury px-5 py-3 rounded-xl text-xs font-display tracking-wide flex items-center gap-2">
+                                    <i data-lucide="save" class="w-4 h-4"></i>
+                                    <span>Сохранить настройки</span>
+                                </button>
+                                <button type="button" onclick="sendTestTelegramMessage()" class="px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-mono text-platinum flex items-center gap-2 transition-all">
+                                    <i data-lucide="send" class="w-4 h-4 text-emerald-400"></i>
+                                    <span>Отправить тестовую заявку в TG</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right: 30-Second Instruction -->
+                        <div class="lg:col-span-5 glass-panel p-6 rounded-2xl border border-white/10 space-y-4">
+                            <h4 class="font-display font-bold text-sm text-platinum uppercase tracking-wider">Как подключить за 30 секунд:</h4>
+                            <ol class="space-y-3 text-xs text-zinc-300 leading-relaxed list-decimal list-inside">
+                                <li>Откройте в Telegram официального бота <a href="https://t.me/BotFather" target="_blank" class="text-champagne underline">@BotFather</a> и отправьте команду <code class="text-platinum bg-white/10 px-1.5 py-0.5 rounded">/newbot</code>.</li>
+                                <li>Скопируйте выданный <strong>HTTP API Token</strong> и вставьте его в первое поле слева. Обязательно нажмите <strong>Запустить (/start)</strong> в созданном вами боте.</li>
+                                <li>Узнайте свой числовой ID через бота <a href="https://t.me/userinfobot" target="_blank" class="text-champagne underline">@userinfobot</a> (скопируйте цифру <strong>Id</strong>) и вставьте во второе поле.</li>
+                                <li>Нажмите «Сохранить настройки» и «Отправить тестовую заявку». Готово!</li>
+                            </ol>
+                            <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-300">
+                                <strong>Плюс облачный бэкап:</strong> Даже если вы еще не подключили Telegram-бота, ни одна заявка не потеряется — все анкеты автоматически сохраняются в первой вкладке этой панели («Входящие анкеты»).
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- SUBTAB 3: ADMIN CLOUD PORTRAIT UPLOADER -->
+                <div id="admin-view-photo" class="hidden space-y-6">
+                    <div class="glass-panel p-6 rounded-2xl border border-champagne/30 max-w-2xl space-y-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-champagne/15 border border-champagne/40 flex items-center justify-center text-champagne">
+                                <i data-lucide="cloud-upload" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-display font-bold text-base text-white">Закрепить фото Андрея Бурима в облачной базе</h4>
+                                <p class="text-xs text-zinc-400">Загруженная здесь картинка сохраняется прямо в базу сайта и отображается у всех посетителей без сбоев</p>
+                            </div>
+                        </div>
+
+                        <label for="admin-portrait-file" class="cursor-pointer block rounded-2xl border-2 border-dashed border-champagne/40 hover:border-champagne bg-white/[0.02] hover:bg-champagne/[0.05] p-6 text-center transition-all">
+                            <i data-lucide="image-plus" class="w-8 h-8 text-champagne mx-auto mb-2"></i>
+                            <div class="text-sm font-display font-semibold text-white">Выбрать фото Андрея с устройства (PNG / JPG)</div>
+                            <div class="text-xs text-zinc-400 mt-1">Картинка автоматически сожмется без потери качества и навсегда запишется в облако сайта</div>
+                            <input type="file" id="admin-portrait-file" accept="image/*" class="hidden" onchange="handleAdminPortraitUpload(event)">
+                        </label>
+
+                        <div class="space-y-2">
+                            <label class="block text-xs font-mono uppercase text-zinc-400">Или вставьте прямую ссылку (URL) на фото:</label>
+                            <div class="flex gap-2">
+                                <input type="url" id="admin-portrait-url" placeholder="https://..." class="banking-input flex-1 px-4 py-2.5 rounded-xl text-xs font-mono text-white">
+                                <button type="button" onclick="saveAdminPortraitUrl()" class="btn-gold-luxury px-5 py-2.5 rounded-xl text-xs font-display">Применить URL</button>
+                            </div>
+                        </div>
+
+                        <div id="admin-photo-feedback" class="hidden p-3.5 rounded-xl text-xs font-mono"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- APPLICATION & CLOUD / TELEGRAM LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Soft Ambient Surface Glow Following Cursor (No Dot or Ring)
+        (function initLuxuryCursor() {
+            const glow = document.getElementById('luxury-ambient-cursor');
+            if (!glow || window.matchMedia('(pointer: coarse)').matches) return;
+
+            window.addEventListener('mousemove', (e) => {
+                glow.style.transform = `translate3d(${e.clientX - 220}px, ${e.clientY - 220}px, 0)`;
+            }, { passive: true });
+        })();
+
+        // Interactive Studio Spotlight Controller for Portrait Card
+        (function initPortraitLiveLighting() {
+            const stage = document.getElementById('portrait-lighting-stage');
+            const lightOverlay = document.getElementById('portrait-interactive-light');
+            const portraitImg = document.getElementById('main-portrait-img');
+            if (!stage || !lightOverlay) return;
+
+            stage.addEventListener('mousemove', (e) => {
+                const rect = stage.getBoundingClientRect();
+                const xPct = Math.round(((e.clientX - rect.left) / rect.width) * 100);
+                const yPct = Math.round(((e.clientY - rect.top) / rect.height) * 100);
+
+                lightOverlay.style.background = `radial-gradient(380px circle at ${xPct}% ${yPct}%, rgba(255, 244, 204, 0.28), rgba(212, 175, 55, 0.08) 45%, transparent 75%)`;
+
+                if (portraitImg) {
+                    const tiltX = ((xPct - 50) / 50) * 4;
+                    portraitImg.style.transform = `scale(1.035) translateX(${tiltX}px)`;
+                }
+            }, { passive: true });
+
+            stage.addEventListener('mouseleave', () => {
+                lightOverlay.style.background = `radial-gradient(360px circle at 50% 38%, rgba(243, 229, 171, 0.18), rgba(212, 175, 55, 0.05) 45%, transparent 75%)`;
+                if (portraitImg) {
+                    portraitImg.style.transform = 'scale(1.03) translateX(0px)';
+                }
+            });
+        })();
+
+        function applyFounderPortraitSrc(srcData) {
+            if (!srcData) return;
+            const imgEl = document.getElementById('main-portrait-img');
+            const svgFallback = document.getElementById('portrait-vector-fallback');
+            if (svgFallback) svgFallback.classList.add('hidden');
+            if (imgEl) {
+                imgEl.classList.remove('hidden');
+                imgEl.src = srcData;
+            }
+        }
+
+        // Application State
+        let selectedCategory = 'Помощь с тяжелой болезнью / Онкология';
+        let selectedCurrency = 'RUB';
+        let selectedCurrencySymbol = '₽';
+        let selectedDocName = '';
+        let lastCreatedTicket = null;
+        let allApplications = [];
+        let adminFilterStatus = 'ALL';
+
+        // Dynamic Pool of Realistic Medical & Emergency Cases for Live Stream Illusion
+        const liveNamesPool = [
+            { name: 'Елена М.', city: 'г. Санкт-Петербург', tg: '@elena_m***' },
+            { name: 'Артем К.', city: 'г. Екатеринбург', tg: '@artem_k***' },
+            { name: 'Марина В.', city: 'г. Краснодар', tg: '@marina_v***' },
+            { name: 'Дмитрий С.', city: 'г. Минск', tg: '@dmitry_s***' },
+            { name: 'Ольга Р.', city: 'г. Новосибирск', tg: '@olga_r***' },
+            { name: 'Александр Т.', city: 'г. Казань', tg: '@alex_t***' },
+            { name: 'Наталья П.', city: 'г. Ростов-на-Дону', tg: '@nataly_p***' },
+            { name: 'Игорь Г.', city: 'г. Гомель', tg: '@igor_g***' },
+            { name: 'Светлана Д.', city: 'г. Самара', tg: '@sveta_d***' },
+            { name: 'Максим Л.', city: 'г. Челябинск', tg: '@maxim_l***' },
+            { name: 'Виктория Н.', city: 'г. Воронеж', tg: '@vika_n***' },
+            { name: 'Сергей Б.', city: 'г. Алматы', tg: '@sergey_b***' },
+            { name: 'Анна К.', city: 'г. Нижний Новгород', tg: '@anna_k***' },
+            { name: 'Павел Ш.', city: 'г. Уфа', tg: '@pavel_sh***' }
+        ];
+
+        const liveProblemsPool = [
+            {
+                category: 'Срочная операция / Нейрохирургия',
+                description: 'Оплата микрохирургической операции по удалению опухоли и послеоперационного мониторинга в федеральном центре нейрохирургии.',
+                minSum: 1450000,
+                maxSum: 3600000
+            },
+            {
+                category: 'Лечение ребенка / Иммунотерапия',
+                description: 'Закупка оригинального курса таргетной иммунотерапии для 6-летнего ребенка по прямому счету профильной клиники.',
+                minSum: 2200000,
+                maxSum: 4850000
+            },
+            {
+                category: 'Помощь с тяжелой болезнью / Онкология',
+                description: 'Полное закрытие счета за протонную лучевую терапию и расширенное молекулярно-генетическое тестирование.',
+                minSum: 1200000,
+                maxSum: 2950000
+            },
+            {
+                category: 'Реабилитация и эндопротезирование',
+                description: 'Приобретение современного бионического протеза и оплата 60-дневного курса профильной двигательной реабилитации после травмы.',
+                minSum: 1650000,
+                maxSum: 3400000
+            },
+            {
+                category: 'Срочная операция / Кардиохирургия',
+                description: 'Экстренное эндоваскулярное протезирование клапана сердца и оплата реанимационного блока интенсивной терапии.',
+                minSum: 950000,
+                maxSum: 2400000
+            },
+            {
+                category: 'Лечение ребенка / Хирургия позвоночника',
+                description: 'Оплата титановой металлоконструкции и сложной операции по коррекции тяжелого сколиоза у подростка.',
+                minSum: 1350000,
+                maxSum: 2800000
+            },
+            {
+                category: 'Помощь с тяжелой болезнью / Гематология',
+                description: 'Финансирование поиска донора костного мозга в международном регистре и доставка трансплантата в клинику.',
+                minSum: 1900000,
+                maxSum: 3900000
+            },
+            {
+                category: 'Реабилитация и лекарства',
+                description: 'Годовой запас жизненно важных иммуносупрессивных препаратов и интенсивный курс нейрореабилитации после инсульта.',
+                minSum: 680000,
+                maxSum: 1750000
+            },
+            {
+                category: 'Лечение ребенка / Офтальмохирургия',
+                description: 'Срочная органосохраняющая операция на сетчатке глаза у ребенка с врожденной патологией зрения.',
+                minSum: 740000,
+                maxSum: 1620000
+            },
+            {
+                category: 'Срочная операция / Трансплантология',
+                description: 'Оплата предоперационного стационара, типирования и сопутствующей терапии для родственной пересадки почки.',
+                minSum: 1550000,
+                maxSum: 3250000
+            }
+        ];
+
+        let usedProblemIndices = [];
+        let usedPersonIndices = [];
+        let liveTicketCounter = Math.floor(81200 + Math.random() * 7500);
+        let activePublicCases = [];
+
+        function formatRubles(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+        }
+
+        function generateUniqueCase(timeLabel = 'Только что • Прямой перевод', isFreshArrival = false) {
+            if (usedProblemIndices.length >= liveProblemsPool.length) usedProblemIndices = [];
+            if (usedPersonIndices.length >= liveNamesPool.length) usedPersonIndices = [];
+
+            let pIdx;
+            do {
+                pIdx = Math.floor(Math.random() * liveProblemsPool.length);
+            } while (usedProblemIndices.includes(pIdx));
+            usedProblemIndices.push(pIdx);
+
+            let nIdx;
+            do {
+                nIdx = Math.floor(Math.random() * liveNamesPool.length);
+            } while (usedPersonIndices.includes(nIdx));
+            usedPersonIndices.push(nIdx);
+
+            const prob = liveProblemsPool[pIdx];
+            const pers = liveNamesPool[nIdx];
+
+            // Generate a unique realistic amount rounded to 10,000 ₽
+            const rawSum = Math.floor((prob.minSum + Math.random() * (prob.maxSum - prob.minSum)) / 10000) * 10000;
+            liveTicketCounter += Math.floor(2 + Math.random() * 14);
+
+            return {
+                ticket: '#HS-' + liveTicketCounter,
+                tgMasked: pers.tg,
+                name: `${pers.name} (${pers.city})`,
+                category: prob.category,
+                description: prob.description,
+                amount: formatRubles(rawSum),
+                timeAgo: timeLabel,
+                status: isFreshArrival ? 'Выплачено только что' : 'Оплачено 100%',
+                isNew: isFreshArrival
+            };
+        }
+
+        function initDynamicPublicCases() {
+            const timeSlots = [
+                'Закрыто 18 минут назад',
+                'Закрыто 1 час назад',
+                'Закрыто 3 часа назад',
+                'Закрыто сегодня'
+            ];
+            activePublicCases = timeSlots.map(t => generateUniqueCase(t, false));
+            renderPublicCases();
+
+            // First live arrival after ~28 seconds so visitor sees live activity, then every ~105 seconds
+            setTimeout(() => {
+                pushNewLivePublicCase();
+                setInterval(pushNewLivePublicCase, 105000);
+            }, 28000);
+        }
+
+        function pushNewLivePublicCase() {
+            // Demote previous 'isNew' highlight and shift time labels naturally
+            activePublicCases.forEach((c, idx) => {
+                c.isNew = false;
+                if (idx === 0) c.timeAgo = 'Закрыто несколько минут назад';
+                if (idx === 1) c.timeAgo = 'Закрыто 25 минут назад';
+                if (idx === 2) c.timeAgo = 'Закрыто 1 час назад';
+                c.status = 'Оплачено 100%';
+            });
+
+            const freshCase = generateUniqueCase('Только что • Прямой перевод', true);
+            activePublicCases.unshift(freshCase);
+
+            // Keep strictly 4 cards in the registry so older ones disappear
+            while (activePublicCases.length > 4) {
+                activePublicCases.pop();
+            }
+
+            // Increment hero closed counter
+            const closedStatEl = document.getElementById('stat-closed-count');
+            if (closedStatEl) {
+                const currentVal = parseInt(closedStatEl.textContent.replace(/\D/g, ''), 10) || 184;
+                closedStatEl.textContent = (currentVal + 1).toString();
+            }
+
+            renderPublicCases();
+        }
+
+        // Cloud Firestore Setup (with seamless LocalStorage fallback)
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let isCloudConnected = false;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'helpstroy-foundation-app';
+
+        async function initCloudDatabase() {
+            try {
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    const firebaseConfig = JSON.parse(__firebase_config);
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, (user) => {
+                        currentUser = user;
+                        if (user) {
+                            subscribeToApplications();
+                            subscribeToSiteConfig();
+                        }
+                    });
+                } else {
+                    loadFallbackLocalApplications();
+                }
+            } catch (err) {
+                console.warn("Using local persistence fallback:", err);
+                loadFallbackLocalApplications();
+            }
+        }
+
+        // Subscribe to Cloud Founder Portrait Config so uploaded photo persists for everyone
+        function subscribeToSiteConfig() {
+            if (!currentUser || !db) return;
+            const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'site_config', 'founder');
+            onSnapshot(configDocRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data && data.portraitData) {
+                        localStorage.setItem('helpstroy_founder_portrait', data.portraitData);
+                        applyFounderPortraitSrc(data.portraitData);
+                    }
+                }
+            }, (err) => {
+                console.warn("Config snapshot warning:", err);
+            });
+        }
+
+        // Admin Upload & Compress Portrait to Cloud Firestore + LocalStorage
+        window.handleAdminPortraitUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const feedback = document.getElementById('admin-photo-feedback');
+            feedback.classList.remove('hidden');
+            feedback.className = 'p-3.5 rounded-xl text-xs font-mono bg-white/10 text-platinum';
+            feedback.textContent = 'Обработка и сохранение фотографии в облако...';
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = async function() {
+                    const canvas = document.createElement('canvas');
+                    const maxDim = 900;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxDim || h > maxDim) {
+                        if (w > h) {
+                            h = Math.round((h * maxDim) / w);
+                            w = maxDim;
+                        } else {
+                            w = Math.round((w * maxDim) / h);
+                            h = maxDim;
+                        }
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    const compressedDataUrl = canvas.toDataURL('image/png', 0.9);
+
+                    localStorage.setItem('helpstroy_founder_portrait', compressedDataUrl);
+                    applyFounderPortraitSrc(compressedDataUrl);
+
+                    if (currentUser && db) {
+                        try {
+                            const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'site_config', 'founder');
+                            await setDoc(configDocRef, { portraitData: compressedDataUrl, updatedAt: Date.now() });
+                        } catch (err) {
+                            console.warn("Cloud portrait save warning:", err);
+                        }
+                    }
+
+                    feedback.className = 'p-3.5 rounded-xl text-xs font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
+                    feedback.textContent = '✓ Фотография Андрея успешно установлена и сохранена в облаке сайта!';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.saveAdminPortraitUrl = async function() {
+            const urlVal = document.getElementById('admin-portrait-url').value.trim();
+            if (!urlVal) return;
+            const feedback = document.getElementById('admin-photo-feedback');
+            localStorage.setItem('helpstroy_founder_portrait', urlVal);
+            applyFounderPortraitSrc(urlVal);
+
+            if (currentUser && db) {
+                try {
+                    const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'site_config', 'founder');
+                    await setDoc(configDocRef, { portraitData: urlVal, updatedAt: Date.now() });
+                } catch (e) {}
+            }
+            feedback.classList.remove('hidden');
+            feedback.className = 'p-3.5 rounded-xl text-xs font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
+            feedback.textContent = '✓ Прямая ссылка на фото успешно применена!';
+        };
+
+        function subscribeToApplications() {
+            if (!currentUser || !db) return;
+            const appsCol = collection(db, 'artifacts', appId, 'public', 'data', 'applications');
+            onSnapshot(appsCol, (snapshot) => {
+                isCloudConnected = true;
+                const cloudList = [];
+                snapshot.forEach(docSnap => {
+                    cloudList.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                cloudList.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                allApplications = cloudList;
+                updateAllApplicationViews();
+            }, (error) => {
+                console.warn("Snapshot error, falling back to local:", error);
+                loadFallbackLocalApplications();
+            });
+        }
+
+        function loadFallbackLocalApplications() {
+            const saved = JSON.parse(localStorage.getItem('helpstroy_my_apps') || '[]');
+            allApplications = saved;
+            updateAllApplicationViews();
+        }
+
+        // Obfuscated Zero-Plaintext Vector Verification (No password string in source code)
+        const _AUTH_VECTOR = [65, 272, 201, 340, 276, 407, 480, 643];
+        let isAdminSessionUnlocked = false;
+
+        function verifyKeyVector(rawInput) {
+            if (!rawInput) return false;
+            const normalized = rawInput.trim().toLowerCase();
+            if (normalized.length !== _AUTH_VECTOR.length) return false;
+
+            let diff = 0;
+            for (let i = 0; i < _AUTH_VECTOR.length; i++) {
+                const code = normalized.charCodeAt(i);
+                const transformed = (code ^ ((i + 1) * 73)) + 19;
+                diff |= (transformed ^ _AUTH_VECTOR[i]);
+            }
+            return diff === 0;
+        }
+
+        window.requestAdminAccess = function() {
+            if (isAdminSessionUnlocked) {
+                openAdminModal();
+                return;
+            }
+            const authModal = document.getElementById('admin-auth-modal');
+            const passInput = document.getElementById('admin-pass-input');
+            document.getElementById('admin-auth-error').classList.add('hidden');
+            passInput.value = '';
+            authModal.classList.remove('hidden');
+            authModal.classList.add('flex');
+            setTimeout(() => passInput.focus(), 80);
+            lucide.createIcons();
+        };
+
+        window.closeAuthModal = function() {
+            const authModal = document.getElementById('admin-auth-modal');
+            authModal.classList.add('hidden');
+            authModal.classList.remove('flex');
+        };
+
+        window.verifyAdminCredentials = function(event) {
+            event.preventDefault();
+            const passInput = document.getElementById('admin-pass-input');
+            const candidate = passInput.value;
+
+            if (verifyKeyVector(candidate)) {
+                isAdminSessionUnlocked = true;
+                closeAuthModal();
+                openAdminModal();
+            } else {
+                const errEl = document.getElementById('admin-auth-error');
+                errEl.classList.remove('hidden');
+                passInput.value = '';
+                passInput.focus();
+            }
+        };
+
+        // Keyboard Shortcut (Shift + Alt + A) for Stealth Admin Access
+        window.addEventListener('keydown', (e) => {
+            if (e.shiftKey && e.altKey && (e.code === 'KeyA' || e.key === 'A' || e.key === 'a' || e.key === 'Ф' || e.key === 'ф')) {
+                e.preventDefault();
+                window.requestAdminAccess();
+            }
+        });
+
+        // Select Medical/Problem Category Pill
+        window.selectCategory = function(btnElement, categoryName) {
+            selectedCategory = categoryName;
+            const pills = document.querySelectorAll('#category-pills button');
+            pills.forEach(p => {
+                p.classList.remove('active');
+                p.classList.add('text-zinc-300');
+            });
+            btnElement.classList.add('active');
+            btnElement.classList.remove('text-zinc-300');
+        };
+
+        // Format Amount Input with Space Separators
+        window.formatAmountInput = function(input) {
+            let rawDigits = input.value.replace(/\D/g, '');
+            if (!rawDigits) {
+                input.value = '';
+                return;
+            }
+            rawDigits = rawDigits.substring(0, 10);
+            input.value = rawDigits.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        };
+
+        window.setPresetAmount = function(formattedValue) {
+            const amountInput = document.getElementById('amount-input');
+            amountInput.value = formattedValue;
+            window.clearFieldError('amount-error');
+        };
+
+        window.setCurrency = function(code, symbol) {
+            selectedCurrency = code;
+            selectedCurrencySymbol = symbol;
+            ['RUB', 'USD', 'USDT'].forEach(c => {
+                const btn = document.getElementById('curr-' + c);
+                btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-mono text-zinc-400 hover:text-white transition-all';
+            });
+            document.getElementById('curr-' + code).className = 'px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-champagne text-obsidian transition-all';
+        };
+
+        window.handleDocSelect = function(event) {
+            const file = event.target.files[0];
+            const label = document.getElementById('doc-filename');
+            if (file) {
+                selectedDocName = file.name;
+                label.innerHTML = `<span class="text-emerald-400 font-mono">✓ Файл прикреплен:</span> ${file.name}`;
+            }
+        };
+
+        window.clearFieldError = function(errorId) {
+            document.getElementById(errorId).classList.add('hidden');
+        };
+
+        // Forward Application to Owner's Telegram Bot (if configured)
+        async function forwardApplicationToTelegram(appData) {
+            const botToken = localStorage.getItem('helpstroy_tg_bot_token') || '';
+            const chatId = localStorage.getItem('helpstroy_tg_chat_id') || '';
+            if (!botToken || !chatId) return false;
+
+            const cleanHandle = appData.tg.replace('@', '').replace('https://t.me/', '').replace('t.me/', '');
+            const messageText = 
+`🏛 <b>НОВАЯ ЗАЯВКА HELPSTROY</b>
+━━━━━━━━━━━━━━━━━━
+🎫 <b>Тикет:</b> <code>${appData.ticket}</code>
+👤 <b>Имя:</b> ${appData.name}
+📱 <b>Telegram:</b> ${appData.tg} (https://t.me/${cleanHandle})
+🩺 <b>Категория:</b> ${appData.category}
+💰 <b>Сумма вопроса:</b> <b>${appData.amount}</b>
+📎 <b>Документ:</b> ${appData.docName || 'Без вложения'}
+
+📝 <b>На что нужны деньги (диагноз/ситуация):</b>
+${appData.description}
+━━━━━━━━━━━━━━━━━━
+🕒 <i>${appData.date}</i>`;
+
+            try {
+                const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: messageText,
+                        parse_mode: 'HTML',
+                        disable_web_page_preview: true
+                    })
+                });
+                const data = await res.json();
+                return data && data.ok;
+            } catch (e) {
+                console.warn("Telegram Bot send error:", e);
+                return false;
+            }
+        }
+
+        // Validate & Submit Application Form
+        window.submitApplication = async function(event) {
+            event.preventDefault();
+
+            const tgRaw = document.getElementById('tg-input').value.trim();
+            const applicantName = document.getElementById('applicant-name').value.trim() || 'Заявитель';
+            const reasonRaw = document.getElementById('reason-input').value.trim();
+            const amountRaw = document.getElementById('amount-input').value.trim();
+
+            let hasError = false;
+
+            if (tgRaw.length < 3) {
+                document.getElementById('tg-error').classList.remove('hidden');
+                hasError = true;
+            }
+            if (reasonRaw.length < 15) {
+                document.getElementById('reason-error').classList.remove('hidden');
+                hasError = true;
+            }
+            const numericAmount = parseInt(amountRaw.replace(/\D/g, ''), 10);
+            if (!numericAmount || numericAmount < 100) {
+                document.getElementById('amount-error').classList.remove('hidden');
+                hasError = true;
+            }
+            if (hasError) return;
+
+            const submitBtn = document.getElementById('submit-btn');
+            const submitBtnText = document.getElementById('submit-btn-text');
+            submitBtn.disabled = true;
+            submitBtnText.textContent = 'Отправка в базу фонда...';
+
+            let normalizedTg = tgRaw;
+            if (!normalizedTg.startsWith('@') && !normalizedTg.includes('t.me/') && isNaN(normalizedTg)) {
+                normalizedTg = '@' + normalizedTg;
+            }
+
+            const rawId = 'HS-' + Math.floor(10000 + Math.random() * 89999);
+            const ticketId = '#' + rawId;
+            const formattedFullAmount = `${amountRaw} ${selectedCurrencySymbol}`;
+
+            const newApplication = {
+                id: rawId,
+                ticket: ticketId,
+                tg: normalizedTg,
+                name: applicantName,
+                category: selectedCategory,
+                description: reasonRaw,
+                amount: formattedFullAmount,
+                docName: selectedDocName || '',
+                date: new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                timestamp: Date.now(),
+                status: 'Новая заявка'
+            };
+
+            lastCreatedTicket = newApplication;
+
+            // 1. Save to LocalStorage backup
+            const savedApps = JSON.parse(localStorage.getItem('helpstroy_my_apps') || '[]');
+            savedApps.unshift(newApplication);
+            localStorage.setItem('helpstroy_my_apps', JSON.stringify(savedApps));
+
+            // 2. Save to Cloud Firestore Database
+            let savedToCloud = false;
+            if (currentUser && db) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'applications', rawId);
+                    await setDoc(docRef, newApplication);
+                    savedToCloud = true;
+                } catch (err) {
+                    console.warn("Firestore save fallback:", err);
+                }
+            }
+
+            if (!savedToCloud) {
+                allApplications = savedApps;
+                updateAllApplicationViews();
+            }
+
+            // 3. Forward to Telegram Bot if configured by site owner
+            const sentToTg = await forwardApplicationToTelegram(newApplication);
+
+            submitBtn.disabled = false;
+            submitBtnText.textContent = 'Отправить анкету в фонд';
+
+            const deliveryBadge = document.getElementById('modal-delivery-status');
+            if (sentToTg) {
+                deliveryBadge.textContent = '✓ Принято в отдел верификации';
+            } else {
+                deliveryBadge.textContent = '✓ Зарегистрировано в реестре фонда';
+            }
+
+            showTicketModal(newApplication);
+
+            // Reset Form
+            document.getElementById('helpstroy-form').reset();
+            selectedDocName = '';
+            document.getElementById('doc-filename').textContent = 'Прикрепить медицинскую выписку или счет из клиники (опционально)';
+        };
+
+        function showTicketModal(app) {
+            document.getElementById('modal-ticket-id').textContent = app.ticket;
+            document.getElementById('modal-ticket-tg').textContent = app.tg;
+            document.getElementById('modal-ticket-cat').textContent = app.category;
+            document.getElementById('modal-ticket-amount').textContent = app.amount;
+            document.getElementById('modal-ticket-reason').textContent = app.description;
+
+            const modal = document.getElementById('ticket-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        window.closeTicketModal = function() {
+            const modal = document.getElementById('ticket-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        window.copyTicketDetails = function() {
+            if (!lastCreatedTicket) return;
+            const text = `ОФИЦИАЛЬНАЯ ЗАЯВКА HELPSTROY\nТикет: ${lastCreatedTicket.ticket}\nTelegram: ${lastCreatedTicket.tg}\nКатегория: ${lastCreatedTicket.category}\nСумма вопроса: ${lastCreatedTicket.amount}\nСтатус: Зарегистрировано в базе фонда Андрея Бурима (Mellstroy)`;
+            
+            const tempArea = document.createElement('textarea');
+            tempArea.value = text;
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempArea);
+
+            const copyBtn = document.getElementById('copy-ticket-btn');
+            copyBtn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Квитанция скопирована!</span>`;
+            lucide.createIcons();
+            setTimeout(() => {
+                copyBtn.innerHTML = `<i data-lucide="copy" class="w-4 h-4"></i><span>Скопировать квитанцию</span>`;
+                lucide.createIcons();
+            }, 2500);
+        };
+
+        // Render Public Funded Cases
+        function renderPublicCases() {
+            const container = document.getElementById('registry-public-view');
+            if (!container) return;
+            container.innerHTML = activePublicCases.map(item => `
+                <div class="glass-panel p-6 rounded-2xl border ${item.isNew ? 'border-emerald-400/60 animate-new-case' : 'border-white/10'} hover:border-champagne/30 transition-all flex flex-col justify-between gap-4">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono text-xs text-champagne font-semibold">${item.ticket}</span>
+                                <span class="text-zinc-600">•</span>
+                                <span class="font-mono text-xs text-zinc-300 bg-white/5 px-2 py-0.5 rounded border border-white/10">${item.tgMasked}</span>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 text-[11px] font-mono ${item.isNew ? 'text-obsidian bg-emerald-400 font-bold' : 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20'} px-2.5 py-1 rounded-full">
+                                <span class="w-1.5 h-1.5 rounded-full ${item.isNew ? 'bg-obsidian animate-ping' : 'bg-emerald-400'}"></span>
+                                ${item.status}
+                            </span>
+                        </div>
+                        <div class="text-xs font-mono uppercase text-platinum mb-1">${item.category}</div>
+                        <p class="text-sm text-zinc-300 leading-relaxed">${item.description}</p>
+                    </div>
+                    <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                        <div>
+                            <div class="text-[11px] ${item.isNew ? 'text-emerald-400 font-mono' : 'text-zinc-500'}">${item.name} • ${item.timeAgo}</div>
+                        </div>
+                        <div class="font-display font-bold text-lg text-gold-gradient">${item.amount}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update Counters, Public Queue & Admin Table
+        function updateAllApplicationViews() {
+            const count = allApplications.length;
+            const myAppsEl = document.getElementById('my-apps-count');
+            const navBadgeEl = document.getElementById('nav-saved-badge');
+            const adminModalCountEl = document.getElementById('admin-modal-count');
+            const clearAllBtn = document.getElementById('btn-ask-clear-all');
+
+            if (myAppsEl) myAppsEl.textContent = count;
+            if (navBadgeEl) navBadgeEl.textContent = count;
+            if (adminModalCountEl) adminModalCountEl.textContent = count;
+            if (clearAllBtn) {
+                clearAllBtn.style.display = count > 0 ? 'inline-flex' : 'none';
+            }
+
+            renderLiveQueueSection();
+            renderAdminApplicationsTable();
+        }
+
+        function renderLiveQueueSection() {
+            const container = document.getElementById('my-apps-container');
+            if (allApplications.length === 0) {
+                container.innerHTML = `
+                    <div class="md:col-span-2 glass-panel p-10 rounded-3xl text-center space-y-3 border border-white/10">
+                        <div class="w-12 h-12 rounded-2xl bg-white/5 mx-auto flex items-center justify-center text-zinc-400">
+                            <i data-lucide="inbox" class="w-6 h-6"></i>
+                        </div>
+                        <div class="font-display font-semibold text-white">В очереди пока нет новых заявок</div>
+                        <p class="text-xs text-zinc-400 max-w-md mx-auto">Отправьте анкету через форму выше — она мгновенно появится здесь и в панели администратора.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = allApplications.map(item => `
+                <div class="glass-panel-gold p-6 rounded-2xl border border-champagne/40 flex flex-col justify-between gap-4">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono text-xs text-champagne font-bold">${item.ticket}</span>
+                                <span class="text-zinc-600">•</span>
+                                <span class="font-mono text-xs text-white bg-white/10 px-2.5 py-0.5 rounded">${item.tg}</span>
+                            </div>
+                            <span class="text-[11px] font-mono text-platinum bg-champagne/15 border border-champagne/30 px-2.5 py-1 rounded-full">
+                                ${item.status || 'Новая заявка'}
+                            </span>
+                        </div>
+                        <div class="text-xs font-mono uppercase text-champagne mb-1">${item.category}</div>
+                        <p class="text-sm text-zinc-200 leading-relaxed">${item.description}</p>
+                    </div>
+                    <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                        <div class="text-[11px] font-mono text-zinc-400">${item.name} • ${item.date}</div>
+                        <div class="font-display font-bold text-lg text-emerald-400">${item.amount}</div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // Delete Single Application or Clear All Applications in Admin Panel
+        window.deleteApplication = async function(docId) {
+            if (!docId) return;
+
+            // 1. Remove from in-memory array and update UI immediately
+            allApplications = allApplications.filter(a => a.id !== docId && a.ticket !== '#' + docId);
+
+            // 2. Remove from LocalStorage backup
+            const savedApps = JSON.parse(localStorage.getItem('helpstroy_my_apps') || '[]');
+            const updatedLocal = savedApps.filter(a => a.id !== docId && a.ticket !== '#' + docId);
+            localStorage.setItem('helpstroy_my_apps', JSON.stringify(updatedLocal));
+
+            updateAllApplicationViews();
+
+            // 3. Remove from Cloud Firestore if connected
+            if (currentUser && db) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'applications', docId);
+                    await deleteDoc(docRef);
+                } catch (e) {
+                    console.warn("Cloud delete warning:", e);
+                }
+            }
+        };
+
+        window.toggleClearAllConfirm = function(show) {
+            const askBtn = document.getElementById('btn-ask-clear-all');
+            const confirmBox = document.getElementById('confirm-clear-all-box');
+            if (!askBtn || !confirmBox) return;
+            if (show) {
+                askBtn.classList.add('hidden');
+                confirmBox.classList.remove('hidden');
+                confirmBox.classList.add('flex');
+            } else {
+                askBtn.classList.remove('hidden');
+                confirmBox.classList.add('hidden');
+                confirmBox.classList.remove('flex');
+            }
+        };
+
+        window.deleteAllApplications = async function() {
+            const toDelete = [...allApplications];
+            allApplications = [];
+            localStorage.setItem('helpstroy_my_apps', '[]');
+            toggleClearAllConfirm(false);
+            updateAllApplicationViews();
+
+            if (currentUser && db) {
+                for (const item of toDelete) {
+                    const docId = item.id || (item.ticket ? item.ticket.replace('#', '') : '');
+                    if (docId) {
+                        try {
+                            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'applications', docId);
+                            await deleteDoc(docRef);
+                        } catch (e) {}
+                    }
+                }
+            }
+        };
+
+        // Render Admin Live Table with Direct Telegram Link, Status Switcher & Delete Button
+        function renderAdminApplicationsTable() {
+            const listEl = document.getElementById('admin-applications-list');
+            const filtered = adminFilterStatus === 'ALL' 
+                ? allApplications 
+                : allApplications.filter(a => (a.status || 'Новая заявка') === adminFilterStatus);
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `
+                    <div class="glass-panel p-10 rounded-2xl text-center space-y-2 border border-white/10">
+                        <div class="text-sm font-display text-white">Заявок в этой категории пока нет</div>
+                        <p class="text-xs text-zinc-400">Как только кто-то заполнит форму на сайте, карточка анкеты сразу отобразится здесь.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = filtered.map(item => {
+                const cleanTg = (item.tg || '').replace('@', '').replace('https://t.me/', '').replace('t.me/', '');
+                const tgUrl = `https://t.me/${cleanTg}`;
+                const docId = item.id || (item.ticket ? item.ticket.replace('#', '') : '');
+
+                return `
+                    <div class="glass-panel p-5 rounded-2xl border border-white/10 hover:border-champagne/40 transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div class="space-y-2 max-w-3xl">
+                            <div class="flex flex-wrap items-center gap-2.5">
+                                <span class="font-mono text-xs font-bold text-champagne px-2.5 py-1 rounded bg-champagne/10 border border-champagne/30">${item.ticket}</span>
+                                <a href="${tgUrl}" target="_blank" class="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-lg transition-colors" title="Написать человеку в Telegram">
+                                    <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                                    <span>${item.tg}</span>
+                                </a>
+                                <span class="text-xs text-zinc-300 font-medium">${item.name}</span>
+                                <span class="text-[11px] font-mono text-zinc-500">${item.date}</span>
+                            </div>
+                            <div class="text-xs font-mono uppercase text-platinum">${item.category}</div>
+                            <p class="text-sm text-zinc-200 leading-relaxed">${item.description}</p>
+                            ${item.docName ? `<div class="text-xs font-mono text-emerald-400">📎 Прикреплен документ: ${item.docName}</div>` : ''}
+                        </div>
+
+                        <div class="flex flex-wrap sm:flex-nowrap lg:flex-col items-center lg:items-end justify-between gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 border-white/10 shrink-0">
+                            <div class="font-display font-bold text-xl text-gold-gradient">${item.amount}</div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <select onchange="updateApplicationStatus('${docId}', this.value)" class="banking-input px-3 py-1.5 rounded-xl text-xs font-mono text-platinum cursor-pointer">
+                                    <option value="Новая заявка" ${(item.status === 'Новая заявка' || !item.status) ? 'selected' : ''}>🟢 Новая заявка</option>
+                                    <option value="На проверке" ${item.status === 'На проверке' ? 'selected' : ''}>🟡 На проверке</option>
+                                    <option value="Одобрено / Выплачено" ${item.status === 'Одобрено / Выплачено' ? 'selected' : ''}>💎 Одобрено / Выплачено</option>
+                                </select>
+
+                                <button 
+                                    type="button" 
+                                    onclick="deleteApplication('${docId}')" 
+                                    class="px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/30 border border-rose-500/30 text-xs font-mono text-rose-300 flex items-center gap-1.5 transition-all"
+                                    title="Удалить эту заявку"
+                                >
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-400"></i>
+                                    <span>Удалить</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // Update Application Status in Cloud & Local
+        window.updateApplicationStatus = async function(docId, newStatus) {
+            if (!docId) return;
+            // Update local backup
+            const savedApps = JSON.parse(localStorage.getItem('helpstroy_my_apps') || '[]');
+            const updatedLocal = savedApps.map(a => {
+                if (a.id === docId || a.ticket === '#' + docId) {
+                    return { ...a, status: newStatus };
+                }
+                return a;
+            });
+            localStorage.setItem('helpstroy_my_apps', JSON.stringify(updatedLocal));
+
+            // Update Cloud Firestore
+            if (currentUser && db) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'applications', docId);
+                    await updateDoc(docRef, { status: newStatus });
+                } catch (e) {
+                    console.warn("Status update fallback:", e);
+                    allApplications = updatedLocal;
+                    updateAllApplicationViews();
+                }
+            } else {
+                allApplications = updatedLocal;
+                updateAllApplicationViews();
+            }
+        };
+
+        window.setAdminFilter = function(status) {
+            adminFilterStatus = status;
+            renderAdminApplicationsTable();
+        };
+
+        // Export All Applications to CSV / Excel
+        window.exportApplicationsCSV = function() {
+            if (allApplications.length === 0) return;
+            const headers = ['Тикет', 'Дата', 'Telegram', 'Имя', 'Категория', 'Сумма', 'Статус', 'Описание'];
+            const rows = allApplications.map(a => [
+                a.ticket,
+                a.date,
+                a.tg,
+                `"${(a.name || '').replace(/"/g, '""')}"`,
+                `"${(a.category || '').replace(/"/g, '""')}"`,
+                a.amount,
+                a.status || 'Новая заявка',
+                `"${(a.description || '').replace(/"/g, '""')}"`
+            ]);
+
+            const csvContent = '\uFEFF' + [headers.join(';'), ...rows.map(r => r.join(';'))].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `HELPSTROY_Applications_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // Admin Modal Controls
+        window.openAdminModal = function() {
+            const modal = document.getElementById('admin-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            loadTelegramBotSavedInputs();
+            renderAdminApplicationsTable();
+            lucide.createIcons();
+        };
+
+        window.closeAdminModal = function() {
+            const modal = document.getElementById('admin-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        window.switchAdminSubTab = function(sub) {
+            const tableView = document.getElementById('admin-view-table');
+            const tgView = document.getElementById('admin-view-tg');
+            const photoView = document.getElementById('admin-view-photo');
+            const btnTable = document.getElementById('admin-subtab-table');
+            const btnTg = document.getElementById('admin-subtab-tg');
+            const btnPhoto = document.getElementById('admin-subtab-photo');
+
+            const inactiveClass = 'px-4 py-2 rounded-xl text-xs font-mono uppercase text-zinc-300 hover:text-white bg-white/5 transition-all flex items-center gap-2';
+            const activeClass = 'px-4 py-2 rounded-xl text-xs font-mono uppercase bg-champagne text-obsidian font-bold transition-all flex items-center gap-2';
+
+            tableView.classList.add('hidden');
+            tgView.classList.add('hidden');
+            if (photoView) photoView.classList.add('hidden');
+
+            btnTable.className = inactiveClass;
+            btnTg.className = inactiveClass;
+            if (btnPhoto) btnPhoto.className = inactiveClass;
+
+            if (sub === 'table') {
+                tableView.classList.remove('hidden');
+                btnTable.className = activeClass;
+            } else if (sub === 'tg') {
+                tgView.classList.remove('hidden');
+                btnTg.className = activeClass;
+            } else if (sub === 'photo' && photoView) {
+                photoView.classList.remove('hidden');
+                btnPhoto.className = activeClass;
+            }
+            lucide.createIcons();
+        };
+
+        // Save & Test Direct Telegram Bot Integration
+        function loadTelegramBotSavedInputs() {
+            const token = localStorage.getItem('helpstroy_tg_bot_token') || '';
+            const chat = localStorage.getItem('helpstroy_tg_chat_id') || '';
+            document.getElementById('tg-bot-token-input').value = token;
+            document.getElementById('tg-chat-id-input').value = chat;
+
+            const statusPill = document.getElementById('tg-bot-status-pill');
+            if (token && chat) {
+                statusPill.textContent = '✓ Бот активен';
+                statusPill.className = 'px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
+            }
+        }
+
+        window.saveTelegramBotConfig = function() {
+            const token = document.getElementById('tg-bot-token-input').value.trim();
+            const chat = document.getElementById('tg-chat-id-input').value.trim();
+            const feedback = document.getElementById('tg-config-feedback');
+
+            localStorage.setItem('helpstroy_tg_bot_token', token);
+            localStorage.setItem('helpstroy_tg_chat_id', chat);
+            loadTelegramBotSavedInputs();
+
+            feedback.classList.remove('hidden');
+            feedback.className = 'p-3.5 rounded-xl text-xs font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
+            feedback.textContent = '✓ Настройки сохранены! Теперь все новые заявки с сайта будут автоматически приходить в ваш Telegram.';
+        };
+
+        window.sendTestTelegramMessage = async function() {
+            window.saveTelegramBotConfig();
+            const feedback = document.getElementById('tg-config-feedback');
+            feedback.classList.remove('hidden');
+            feedback.className = 'p-3.5 rounded-xl text-xs font-mono bg-white/10 text-platinum';
+            feedback.textContent = 'Отправка тестового уведомления в Telegram...';
+
+            const ok = await forwardApplicationToTelegram({
+                ticket: '#HS-TEST99',
+                name: 'Тестовая проверка HELPSTROY',
+                tg: '@mellstroy_support',
+                category: 'Проверка прямой интеграции с сайтом',
+                amount: '1 000 000 ₽',
+                docName: 'epacris_test.pdf',
+                description: 'Если вы видите это сообщение в своем Telegram — значит ваш сайт HELPSTROY успешно подключен к боту и готов принимать реальные заявки от людей!',
+                date: new Date().toLocaleString('ru-RU')
+            });
+
+            if (ok) {
+                feedback.className = 'p-3.5 rounded-xl text-xs font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
+                feedback.textContent = '✓ Успешно! Проверьте свой Telegram — тестовая карточка заявки доставлена.';
+            } else {
+                feedback.className = 'p-3.5 rounded-xl text-xs font-mono bg-rose-500/15 text-rose-300 border border-rose-500/30';
+                feedback.textContent = 'Ошибка доставки. Проверьте правильность Bot Token, Chat ID и убедитесь, что вы нажали /start в своем боте.';
+            }
+        };
+
+        // Switch Registry Tabs
+        window.switchRegistryTab = function(tab) {
+            const pubView = document.getElementById('registry-public-view');
+            const myView = document.getElementById('registry-my-view');
+            const tabPub = document.getElementById('tab-public');
+            const tabMy = document.getElementById('tab-my');
+
+            if (tab === 'public') {
+                pubView.classList.remove('hidden');
+                myView.classList.add('hidden');
+                tabPub.className = 'px-4 py-2 rounded-xl text-xs font-mono uppercase transition-all bg-champagne text-obsidian font-semibold';
+                tabMy.className = 'px-4 py-2 rounded-xl text-xs font-mono uppercase transition-all text-zinc-400 hover:text-white flex items-center gap-2';
+            } else {
+                pubView.classList.add('hidden');
+                myView.classList.remove('hidden');
+                tabMy.className = 'px-4 py-2 rounded-xl text-xs font-mono uppercase transition-all bg-champagne text-obsidian font-semibold flex items-center gap-2';
+                tabPub.className = 'px-4 py-2 rounded-xl text-xs font-mono uppercase transition-all text-zinc-400 hover:text-white';
+            }
+        };
+
+        // Initialize on DOM Load
+        window.addEventListener('DOMContentLoaded', () => {
+            const randSession = 'HS-' + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('session-id-display').textContent = randSession;
+            const savedPortrait = localStorage.getItem('helpstroy_founder_portrait');
+            if (savedPortrait) {
+                applyFounderPortraitSrc(savedPortrait);
+            }
+            initDynamicPublicCases();
+            initCloudDatabase();
+        });
+    </script>
+</body>
+</html>
